@@ -45,7 +45,8 @@ QUESTIONS = [
     ("target.abroad_ok", "Open to roles abroad with relocation? (y/n)"),
     ("target.abroad_junior_ok", "Abroad: OK to take a more junior title if the pay is good? (y/n)"),
     ("target.skip_companies", "Companies to never apply to, comma separated"),
-    ("target.skip_countries", "Countries/company origins to never apply to, comma separated"),
+    ("target.skip_countries", "Job locations (countries) to never apply to, comma separated"),
+    ("target.skip_company_origins", "Never apply to companies headquartered/founded in these countries, comma separated"),
     ("work.current_employer", "Current employer (as on your CV)"), ("work.notice_period", "Notice period (e.g. 1 month)"),
     ("work.notice_weeks", "Notice period in weeks"), ("work.hide_employers", "Employers to never mention, comma separated"),
     ("pay.current_monthly", "Current monthly salary (number, in your currency)"), ("pay.currency", "Your currency (e.g. IDR)"),
@@ -61,7 +62,8 @@ QUESTIONS = [
     ("education.gpa", "GPA (e.g. 3.40/4.00), leave blank if you don't want it used"),
     ("languages.english", "English level (e.g. Professional working proficiency)"), ("languages.japanese", "Japanese level (None if none)"),
     ("rules.approval_mode", "Approval mode: auto (submit on its own) or review (stop before every submit)"),
-    ("rules.min_fit", "Minimum fit score 1-5 to apply"),
+    ("rules.min_fit_shortlist", "Minimum fit score 1-5 to shortlist a job"),
+    ("rules.auto_submit_fit", "Minimum fit score 1-5 to submit without asking (auto mode)"),
 ]
 
 print("Answer what you can; Enter keeps the value in [brackets].\n")
