@@ -103,11 +103,13 @@
   "education": {
     "degree": "",
     "school": "",
-    "gpa": ""
+    "gpa": "",
+    "classification": ""
   },
   "languages": {
     "english": "Professional working proficiency",
-    "japanese": "None"
+    "japanese": "None",
+    "interview_language": "English"
   },
   "skills_years": {
     "backend": 3,
@@ -127,5 +129,12 @@
     "approval_mode": "auto",
     "min_fit_shortlist": 3,
     "auto_submit_fit": 4
+  },
+  "motivation": {
+    "summary": ""
+  },
+  "consent": {
+    "policy_acknowledgements": true,
+    "marketing_optins": false
   }
 }

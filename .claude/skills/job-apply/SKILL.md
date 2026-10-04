@@ -40,6 +40,10 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 Screening answers come from `tools/answers.py` (driven by `profile.json`). Anything it can't answer -> stop,
 log the job as `Shortlisted` with `NEEDS YOU: <question>` and move on. Never stall on one job.
 
+Answer from the profile when the user has given it during onboarding: GPA/degree classification (`education`),
+"why us?" (tailor `motivation.summary` to the company, never invent facts), standard acknowledgements
+(`consent.policy_acknowledgements`), marketing opt-ins (`consent.marketing_optins`, default No).
+
 Never answer on the user's behalf: personal essays a company says must not be AI-written, health/medical
 questions not in the profile, GPA if blank, video questions, anything legal that isn't in the profile.
 
