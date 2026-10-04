@@ -60,6 +60,7 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 |---|---|---|
 | Typed text didn't land in cells | Sheets ignores inserted text when no cell is in edit mode | `sheet_push.py` pastes a TSV block with a synthetic paste event at A1 instead. |
 | Paste overwrote the header | Selection was A1 after load | The tracker CSV (header included) is pasted whole at A1, so the sheet is always a full mirror. |
+| Old rows stayed at the bottom after the tracker shrank | A paste only overwrites the cells it covers | `sheet_push.py` pastes 60 blank rows after the data to clear leftovers. |
 
 ## Agent harness (Claude Code)
 

@@ -40,7 +40,8 @@ for _ in range(30):
         pass
 time.sleep(3)
 post("eval", {"id": TAB, "expr": "(()=>{document.querySelector('.waffle-name-box, #t-name-box');return 1})()"})
-tsv = "\n".join("\t".join(("'" + v if v[:1] in "=+-@" else v).replace("\n", " ").replace("\t", " ") for v in r) for r in rows)
+PAD_ROWS = 60  # blank rows pasted after the data so rows removed from the tracker disappear from the sheet too
+tsv = "\n".join("\t".join(("'" + v if v[:1] in "=+-@" else v).replace("\n", " ").replace("\t", " ") for v in r) for r in rows) + ("\n" + "\t" * 15) * PAD_ROWS
 post("eval", {"id": TAB, "expr": """(()=>{const dt=new DataTransfer();dt.setData('text/plain',%s);
 const t=document.activeElement;t.dispatchEvent(new ClipboardEvent('paste',{clipboardData:dt,bubbles:true,cancelable:true}));return t.tagName+'.'+t.className})()""" % json.dumps(tsv)})
 time.sleep(3)
