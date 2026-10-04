@@ -1,0 +1,14 @@
+{
+  "identity": {"first_name": "", "last_name": "", "email": "", "phone_country_code": "62", "phone_local": "", "city": "Jakarta", "city_autocomplete": "Jakarta, Jakarta Special Capital Region, Indonesia", "country": "Indonesia", "nationality": "Indonesian", "linkedin": "", "github": "", "age": ""},
+  "target": {"roles": ["Backend Engineer"], "seniority": "Mid to Senior", "remote": "remote preferred", "home_onsite_city": "Jakarta", "abroad_ok": true, "abroad_junior_ok": true, "skip_companies": [], "skip_countries": []},
+  "work": {"current_employer": "", "notice_period": "1 month", "notice_weeks": 4, "hide_employers": []},
+  "pay": {"currency": "IDR", "current_monthly": 0, "expected_monthly_home": 0, "bonuses": "",
+          "abroad_monthly": {"SG": ["SGD", 7500], "MY": ["MYR", 10000], "JP": ["JPY", 600000], "AE": ["AED", 25000], "VN": ["VND", 50000000], "TH": ["THB", 90000], "HK": ["HKD", 40000], "NL": ["EUR", 5500], "DE": ["EUR", 5500], "UK": ["GBP", 5000], "AU": ["AUD", 9000]}},
+  "legal": {"home_country_code": "ID", "authorized_countries": ["Indonesia"], "needs_sponsorship_elsewhere": true, "willing_to_relocate": true, "willing_to_travel": true},
+  "eeo": {"gender": "Prefer not to say", "orientation": "", "veteran": "Not a veteran", "disability": "No", "mental_health_history": ""},
+  "education": {"degree": "", "school": "", "gpa": ""},
+  "languages": {"english": "Professional working proficiency", "japanese": "None"},
+  "skills_years": {"backend": 3, "python": 3, "golang": 1, "sql": 3, "docker": 2, "kubernetes": 0, "java": 0},
+  "files": {"cv": "me/cv/CV.pdf", "photo": "", "linkedin_resume_name": ""},
+  "rules": {"approval_mode": "auto", "min_fit": 4}
+}

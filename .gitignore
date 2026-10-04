@@ -1,0 +1,5 @@
+me
+me/
+.DS_Store
+__pycache__/
+*.pyc
