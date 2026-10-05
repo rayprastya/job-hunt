@@ -71,6 +71,7 @@ QUESTIONS = [
     ("legal.driving_licence", "Driving licence? (Yes/No, blank to skip)"),
     ("cover_letter.mode", "Cover letters: 'auto' (write when there's a field), 'required' (only when required), 'never', or 'ask' (decide later)"),
     ("cover_letter.reference_file", "Path to a cover letter you like (yours or a sample) so the agent mirrors its tone; blank to skip"),
+    ("cover_letter.hiring_message_notes", "'Message to the hiring team' style (e.g. soft, not salesy, cite 2-3 facts from my current job); blank = same as cover letters"),
     ("cover_letter.style_notes", "Cover letter style notes (e.g. short, friendly, 3 paragraphs, no cliches)"),
     ("eeo.gender", "Gender for diversity questions (or 'Prefer not to say')"),
     ("eeo.veteran", "Veteran status (e.g. Not a veteran)"), ("eeo.disability", "Disability (e.g. No)"),

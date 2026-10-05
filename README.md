@@ -40,6 +40,8 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
 - **Separate window (easiest):** run `bash tools/browser-separate.sh` (Windows: `.\tools\browser-separate.ps1`),
   log in to LinkedIn + Google in the window that opens, then `CDP_PORT=9333 node tools/cdpd.mjs &`.
   Later runs can be invisible: `bash tools/browser-separate.sh --headless` (same logins, doesn't steal focus).
+  **The agent applies in this invisible browser first** so you can keep using your computer; only forms with a bot
+  check (you click Submit) open in your normal browser.
 - **Your normal browser:** type `brave://inspect/#remote-debugging` (or `chrome://` / `edge://`) in the address bar,
   tick **"Allow remote debugging for this browser instance"**, run `node tools/cdpd.mjs &`, then click **Allow**
   in the popup. Redo after every browser restart.
@@ -95,13 +97,13 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
 | `tools/` | See below. |
 
 **Tools:** `selftest.py` (check + auto-update), `update.py`, `run.py` (stall retry), `search_jobs.py`, `prefs.py`,
-`easy_apply.py`, `sr_apply.py` (SmartRecruiters), `ashby_apply.py`, `gh_apply.py` (Greenhouse), `answers.py`,
+`easy_apply.py`, `sr_apply.py` (SmartRecruiters), `sea_apply.py` (Sea/Shopee/Monee/Garena), `ashby_apply.py`, `gh_apply.py` (Greenhouse), `answers.py`,
 `log.py`, `sheet_create.py`, `sheet_push.py` (two-way sync), `tabs.py` (close finished tabs), `cv_pdf.py`, `br.py` (browser CLI), `cdpd.mjs` (browser connector), `onboard.py`,
 `guard_commit.py`, `upstream_check.py`, `browser-separate.sh/.ps1`.
 
 ## Known limits (by design or by the sites)
 - Ashby, Greenhouse and Lever forms have bot checks: the agent fills everything, you click Submit.
-- Workday sites need an account per company; Sea/Shopee/Garena forms need your GPA; some ask for a video.
+- Workday sites need an account per company; Sea/Shopee/Monee/Garena forms need your GPA; some ask for a video.
 - LinkedIn caps Easy Apply per day; company career sites are preferred anyway.
 - Local-language or "must already live here" roles are filtered out or flagged.
 - The agent never sends emails or messages to recruiters for you; email-only postings become leads in the sheet.

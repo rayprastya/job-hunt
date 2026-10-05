@@ -60,7 +60,7 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 | Ashby (`jobs.ashbyhq.com`) | Prefill only | Invisible bot check blocks automated Submit. `ashby_apply.py --dry-run` fills everything; you click Submit. |
 | Greenhouse (`job-boards.greenhouse.io`) | Prefill only | reCAPTCHA. Dropdowns: open the control (a second click may be needed when another menu was open), click the option; typing the full option text can filter everything out, so type only a short prefix. The phone "Country" flyout isn't automated yet: `gh_apply.py` prints a CHECK line and you pick it in one click before Submit. |
 | Lever (`jobs.lever.co`) | Prefill only | hCaptcha. |
-| Sea / Shopee / Garena careers | Needs GPA | Form requires CGPA and degree classification. |
+| Sea / Shopee / Monee / Garena careers | `tools/sea_apply.py`, headless OK | Needs `education.gpa`. Dropdowns open only on a real mouse click (keyboard shows "No data"); options render in a class-less `<div>` at the end of `<body>`. "Current Location" is a country list. Degree classification uses UK/US honours, so other systems pick "Others / Not Applicable". Old `careers.monee.com/job-detail?id=` links show an empty page when the posting closed. |
 | BrioHR (`boards.briohr.com`) | Prefill only | Visible "I'm not a robot" checkbox: you tick it and Submit. Custom questions are textareas whose label lookup can grab the section title; match by field id or the label right above the box. |
 | Workday | Manual | Needs an account per company. |
 | Dealls quick apply | Manual | Button doesn't open from automation; use the Dealls app. |

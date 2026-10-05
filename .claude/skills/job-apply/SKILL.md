@@ -52,9 +52,19 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 3. Recruitment agencies and LinkedIn-only postings -> LinkedIn Easy Apply (fallback; LinkedIn caps it per day).
 
 ## 3. Apply
+
+**Background first.** Run applications in the headless (invisible) browser so the user's screen and tabs stay free:
+start it with `bash tools/browser-separate.sh --headless` and its connector with
+`BRIDGE_PORT=9341 CDP_PORT=9333 node tools/cdpd.mjs &`, then prefix apply tools with `BRIDGE_URL=http://127.0.0.1:9341`.
+Use it for every site that needs no login and no human click (SmartRecruiters, Sea Group, Zoho, Breezy).
+Use the user's normal browser (port 9339) only for: LinkedIn search and Easy Apply and the Google Sheet, unless the
+headless profile has been logged in once (`bash tools/browser-separate.sh`, log in, close); and bot-check forms
+(Ashby/Greenhouse/Lever) that the user must Submit by hand.
+
 | Route | Tool | Submits on its own? |
 |---|---|---|
 | SmartRecruiters | `python3 tools/sr_apply.py <tab> <job-url> <message-file> [--visa-yes --country=SG]` | Yes |
+| Sea Group (Sea, Shopee, Monee, Garena) | `python3 tools/sea_apply.py <tab> <posting-url> [--dry-run]` (needs `education.gpa`) | Yes |
 | Zoho Recruit / Breezy / simple forms | page-specific fill (see TROUBLESHOOTING) | Yes |
 | Ashby | `python3 tools/ashby_apply.py <tab> <url> <answers.json> --dry-run --country=XX` | No: prefill, user clicks Submit |
 | Greenhouse | `python3 tools/gh_apply.py <tab> <answers.json>` | No: prefill (captcha) |
@@ -77,6 +87,11 @@ Pay for a country with no saved number (`pay.abroad_monthly`): if `pay.when_miss
 market rate (Glassdoor, Levels.fyi, Nodeflair, Payscale, the posting itself) and use a fair mid-to-upper figure; if it
 is `ask` or blank, ask the user with options: (a) they give a number, (b) the agent researches the market rate and
 uses it, (c) skip pay questions for that country. Save the answer to `pay.abroad_monthly` so it's asked only once.
+
+"Message to the hiring team" (SmartRecruiters and others): follow `cover_letter.hiring_message_notes`, or the cover
+letter style when blank. Default tone: soft, not a hard sell; 80-130 words; who they are now, 2-3 concrete facts with
+numbers from the current job first, one line on why this team, a warm close. Only true facts from the CV/profile.
+If the profile has too few concrete facts, ask the user for 2-3 achievements once and save them.
 
 Cover letters and "why us?" texts: read `cover_letter.reference_file` (a letter the user likes) and
 `cover_letter.style_notes`, mirror that tone and structure, use only true facts from the CV/profile, and tailor to the
