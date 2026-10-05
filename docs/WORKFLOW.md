@@ -8,7 +8,18 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 - Browser bridge must be running (`docs/BROWSER.md`): `curl -s -X POST http://127.0.0.1:9339/list`.
 - Ask how many applications this run (default: a small first batch of ~5 so the person can check quality).
 
+## Tools at a glance
+| Need | Command |
+|---|---|
+| Check setup | `python3 tools/selftest.py` |
+| Search + filter jobs | `python3 tools/search_jobs.py --regions ID,SG,WW --days 7` -> `me/candidates.json` |
+| Drive the browser manually | `python3 tools/br.py list|open|goto|eval|click|type|key|upload|shot|close` |
+| Tailored CV to PDF | copy `templates/cv-example.html`, edit, then `python3 tools/cv_pdf.py me/cv/x.html me/cv/Name_CV.pdf` |
+| Log / sync | `python3 tools/log.py ...`, `python3 tools/sheet_push.py` |
+(On Windows use `python` instead of `python3`.)
+
 ## 1. Find jobs
+- Fast path: `python3 tools/search_jobs.py` (uses target roles, regions and skip lists from the profile).
 - LinkedIn guest search API (fast, no rendering), from a logged-in LinkedIn tab:
   `/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=...&geoId=...&f_TPR=r604800&f_WT=2&start=0`
   Pause ~2 s between requests or LinkedIn returns empty pages.

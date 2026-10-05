@@ -9,7 +9,7 @@ logs everything to a Google Sheet, and stops to ask you whenever a question isn'
 **New here? Read [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md)**: a step-by-step guide, including a way to set
 everything up by just chatting with your AI (no terminal).
 
-Terminal version:
+Terminal version (macOS/Linux; Windows: see the guide, it uses `install.ps1`):
 ```bash
 git clone https://github.com/rayprastya/job-hunt.git ~/job-hunt-download && bash ~/job-hunt-download/install.sh
 ```
@@ -30,7 +30,7 @@ Then:
 | Path | What |
 |---|---|
 | `me/` | YOUR private data (profile, rules, CV, tracker). Gitignored, never pushed. Keep it in a private repo or synced folder to use it on other devices. |
-| `templates/` | Starting points for `me/`. |
+| `templates/` | Starting points for `me/` (profile, tracker, a CV HTML template). |
 | `docs/GETTING_STARTED.md` | Beginner setup guide and everyday commands. |
 | `docs/WORKFLOW.md` | The step-by-step process the agent follows. |
 | `docs/TROUBLESHOOTING.md` | Every roadblock hit so far and its fix. |
@@ -43,5 +43,12 @@ Then:
 - Respects your skip lists (companies, countries).
 - LinkedIn limits Easy Apply per day; company career sites are preferred anyway.
 
+## Known limits (by design or by the sites)
+- Ashby, Greenhouse and Lever forms have bot checks: the agent fills everything, you click Submit.
+- Workday sites need an account per company; Sea/Shopee/Garena forms need your GPA; some ask for a video.
+- LinkedIn caps Easy Apply per day; company career sites are preferred anyway.
+- Local-language or "must already live here" roles are filtered out or flagged.
+- The agent never sends emails or messages to recruiters for you; email-only postings become leads in the sheet.
+
 ## Requirements
-macOS or Linux, Python 3, Node 20+, Brave or Chrome, and an AI coding agent that can run shell commands.
+macOS, Windows (PowerShell installer: `install.ps1`) or Linux; Python 3.9+, Node 22+, Brave/Chrome/Edge, and an AI coding agent that can run shell commands. Run `python3 tools/selftest.py` to check everything.

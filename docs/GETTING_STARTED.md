@@ -10,10 +10,10 @@ There are two ways to do the setup: **Option A** lets your AI assistant do it fo
 
 | Thing | Why | Where to get it |
 |---|---|---|
-| A Mac or Linux computer | The browser automation runs locally | (Windows: use WSL, see the end) |
-| Brave or Google Chrome | The AI fills job forms in your browser | brave.com / google.com/chrome |
+| A Mac, Windows or Linux computer | The browser automation runs locally | Windows steps: see "Windows" below |
+| Brave, Google Chrome or Microsoft Edge | The AI fills job forms in your browser | brave.com / google.com/chrome / (Edge is built into Windows) |
 | Python 3 | Runs the helper scripts | Already on most Macs. Check: open Terminal, type `python3 --version` |
-| Node.js 20 or newer | Runs the small browser connector | nodejs.org (download the LTS installer) |
+| Node.js 22 or newer | Runs the small browser connector (needs built-in WebSocket) | nodejs.org (download the LTS installer) |
 | An AI agent that can run commands | Does the actual work | Claude Code (desktop app, terminal, or VS Code), or see `docs/OTHER_AI.md` |
 | Your CV as a PDF | Uploaded to applications | |
 | A Google account | For the tracking spreadsheet | |
@@ -81,6 +81,13 @@ Tip: make a version without anything you don't want employers to see.
 
 ---
 
+## Check your setup
+
+Run `python3 tools/selftest.py` (Windows: `python tools\selftest.py`). It checks Python, Node, your profile, your CV,
+the sheet link and the browser connector, and tells you exactly what to fix.
+
+---
+
 ## Create the tracking sheet (both options)
 
 1. Go to **sheets.new** (logged in to Google).
@@ -140,8 +147,46 @@ Read the **Notes** column in the sheet: it says what's waiting on you and flags 
    (e.g. a private GitHub repo you cloned, or a Google Drive / iCloud folder).
 
 ## Windows
-Install WSL (Ubuntu) from the Microsoft Store, then follow Option B inside it. Run Brave/Chrome on Windows with
-`--remote-debugging-port=9333 --user-data-dir=C:\job-hunt-browser` and use `CDP_PORT=9333`.
+
+Everything works natively on Windows 10/11 with PowerShell.
+
+### 1. Install the tools (once)
+Open **PowerShell** (Start menu > type "PowerShell" > Enter) and run:
+```powershell
+winget install Git.Git
+winget install Python.Python.3.12
+winget install OpenJS.NodeJS.LTS
+```
+Close and reopen PowerShell afterwards so the new commands are found. (No winget? Download from git-scm.com,
+python.org (tick **"Add python.exe to PATH"**) and nodejs.org.)
+
+### 2. Run the Windows installer
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+iwr https://raw.githubusercontent.com/rayprastya/job-hunt/main/install.ps1 -OutFile install.ps1
+.\install.ps1
+```
+It asks the same questions as the Mac/Linux installer (install folder, private folder, the interview).
+Tip: put the private folder in OneDrive or Google Drive to use it on another PC.
+
+### 3. Browser
+Follow `docs/BROWSER.md`, Windows commands:
+- Separate profile: `.\tools\browser-separate.ps1` (or `-Browser chrome` / `-Browser edge`), then
+  `$env:CDP_PORT=9333; node tools\cdpd.mjs`
+- Main browser: open `brave://inspect/#remote-debugging` (Chrome: `chrome://`, Edge: `edge://`), switch on
+  "Allow remote debugging for this browser instance", run `node tools\cdpd.mjs`, click **Allow**.
+
+### 4. Check and start
+```powershell
+python tools\selftest.py
+```
+Then open your AI agent (Claude desktop app or VS Code extension) in the install folder and say
+"find me jobs and apply, 5 for now". On Windows the commands are `python` instead of `python3`; the agent handles that.
+
+### Windows notes
+- Keep the PC awake during long runs: Settings > System > Power > Screen and sleep > "Never" (while plugged in).
+- If PowerShell refuses to run scripts, run `Set-ExecutionPolicy -Scope Process Bypass` in that window first.
+- WSL also works, but then the browser must be started on Windows with the separate-profile command above.
 
 ## Something went wrong?
 See `docs/TROUBLESHOOTING.md`: it lists every problem hit so far and the fix.

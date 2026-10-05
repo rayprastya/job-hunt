@@ -1,11 +1,11 @@
 """Push new rows from me/tracker.csv into the Google Sheet by typing in the browser (tools/cdpd.mjs bridge).
 
-Usage: python3 sheet_push.py <tab-id>
+Usage: python3 sheet_push.py [tab-id]   (without a tab id it opens its own tab)
 Rewrites the whole sheet from A1 (header + every row), so status changes sync too.
 """
 import csv, json, os, sys, time, urllib.request
 
-TAB = sys.argv[1]
+TAB = sys.argv[1] if len(sys.argv) > 1 else None
 ME = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "me")
 SHEET = open(f"{ME}/config.md").read().split("Tracker sheet:")[1].split()[0]
 B = "http://127.0.0.1:9339"
@@ -29,6 +29,8 @@ def key(k, code, vk):
 
 rows = list(csv.reader(open(f"{ME}/tracker.csv")))  # header + all rows; rewrites the sheet from A1
 
+if TAB is None:
+    TAB = post("raw", {"method": "Target.createTarget", "params": {"url": "about:blank"}})["targetId"]
 post("activate", {"id": TAB})
 post("goto", {"id": TAB, "url": SHEET.split("#")[0].split("?")[0] + "#gid=0&range=A1"})
 for _ in range(30):

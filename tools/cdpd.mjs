@@ -14,17 +14,20 @@ import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 
 // Endpoint: CDP_WS (full ws URL) > CDP_PORT (separate profile started with --remote-debugging-port)
-// > the main browser's DevToolsActivePort file (Brave by default, CDP_BROWSER=chrome for Chrome).
+// > the main browser's DevToolsActivePort file (CDP_BROWSER=brave|chrome|edge, default brave; macOS, Windows, Linux).
 async function endpoint() {
   if (process.env.CDP_WS) return process.env.CDP_WS;
   if (process.env.CDP_PORT) {
     const v = await (await fetch(`http://127.0.0.1:${process.env.CDP_PORT}/json/version`)).json();
     return v.webSocketDebuggerUrl;
   }
-  const mac = process.platform === "darwin";
-  const base = process.env.CDP_BROWSER === "chrome"
-    ? (mac ? `${homedir()}/Library/Application Support/Google/Chrome` : `${homedir()}/.config/google-chrome`)
-    : (mac ? `${homedir()}/Library/Application Support/BraveSoftware/Brave-Browser` : `${homedir()}/.config/BraveSoftware/Brave-Browser`);
+  const plat = process.platform, home = homedir(), local = process.env.LOCALAPPDATA || `${home}/AppData/Local`;
+  const dirs = {
+    brave:  { darwin: `${home}/Library/Application Support/BraveSoftware/Brave-Browser`, win32: `${local}/BraveSoftware/Brave-Browser/User Data`, linux: `${home}/.config/BraveSoftware/Brave-Browser` },
+    chrome: { darwin: `${home}/Library/Application Support/Google/Chrome`, win32: `${local}/Google/Chrome/User Data`, linux: `${home}/.config/google-chrome` },
+    edge:   { darwin: `${home}/Library/Application Support/Microsoft Edge`, win32: `${local}/Microsoft/Edge/User Data`, linux: `${home}/.config/microsoft-edge` },
+  };
+  const base = dirs[process.env.CDP_BROWSER || "brave"][plat] || dirs.brave.linux;
   const [port, path] = readFileSync(`${base}/DevToolsActivePort`, "utf8").trim().split("\n");
   return `ws://127.0.0.1:${port}${path}`;
 }

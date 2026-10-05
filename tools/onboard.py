@@ -36,7 +36,8 @@ def ask(path, question):
 QUESTIONS = [
     ("identity.first_name", "First name"), ("identity.last_name", "Last name"), ("identity.email", "Email"),
     ("identity.phone_country_code", "Phone country code (digits, e.g. 62)"), ("identity.phone_local", "Phone number without country code"),
-    ("identity.city", "City you live in"), ("identity.country", "Country you live in"), ("identity.nationality", "Nationality (e.g. Indonesian)"),
+    ("identity.city", "City you live in"),
+    ("identity.city_autocomplete", "Your city as job sites autocomplete it (e.g. 'Jakarta, Jakarta Special Capital Region, Indonesia')"), ("identity.country", "Country you live in"), ("identity.nationality", "Nationality (e.g. Indonesian)"),
     ("identity.linkedin", "LinkedIn URL"), ("identity.github", "GitHub / portfolio URL"), ("identity.age", "Age (only used if a form asks)"),
     ("target.roles", "Target roles, comma separated (e.g. Backend Engineer, Fullstack Developer)"),
     ("target.seniority", "Seniority you want to be pitched as (e.g. Mid, Mid to Senior)"),
@@ -66,6 +67,8 @@ QUESTIONS = [
     ("consent.marketing_optins", "OK to opt in to marketing / talent-community emails? (y/n)"),
     ("languages.interview_language", "Preferred interview language (e.g. English)"),
     ("languages.english", "English level (e.g. Professional working proficiency)"), ("languages.japanese", "Japanese level (None if none)"),
+    ("files.cv", "Path to your CV PDF (e.g. me/cv/Jane_Doe_CV.pdf)"),
+    ("files.linkedin_resume_name", "File name of that CV once uploaded to LinkedIn (linkedin.com/jobs/application-settings), so Easy Apply picks it"),
     ("rules.approval_mode", "Approval mode: auto (submit on its own) or review (stop before every submit)"),
     ("rules.min_fit_shortlist", "Minimum fit score 1-5 to shortlist a job"),
     ("rules.auto_submit_fit", "Minimum fit score 1-5 to submit without asking (auto mode)"),
