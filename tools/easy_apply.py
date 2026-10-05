@@ -21,6 +21,13 @@ SALARY = ME.SALARY  # {country: (currency, monthly, "monthly")}
 
 def answer(q, kind, options=None):
     """Return an answer string (or option text) or None when profile facts do not settle it."""
+    a = _answer(q, kind, options)
+    if a is not None and re.search(r"salary|compensation|pay\b|ctc", q.lower()):
+        a = scale_money(q, a)
+    return a
+
+
+def _answer(q, kind, options=None):
     ql = " " + q.lower().replace("\n", " ") + " "
     for k, v in json.loads(os.environ.get("EA_EXTRA", "{}")).items():  # per-job answers the user gave explicitly
         if k.lower() in ql:
@@ -46,6 +53,8 @@ def answer(q, kind, options=None):
         return None
     if re.search(r"ideal start date|earliest (possible )?start|when could you start", ql):
         return "After a 1-month notice period (around early November 2026)"
+    if "notice period" in ql and "month" in ql and re.search(r"in months|\(months\)|number of months", ql):
+        return str(max(1, round(int(ME.NOTICE_WEEKS or 4) / 4)))
     if "notice period" in ql and "week" in ql:
         return "4"
     if "notice period" in ql and "day" in ql:
@@ -240,6 +249,22 @@ def answer(q, kind, options=None):
     if re.search(r"bonus", ql):
         return (pick(options, "Yes") if options else ME.BONUSES) if ME.BONUSES else None
     return None
+
+
+def scale_money(q, value):
+    """Apply 'in millions' / 'in thousands' / 'in k' units a form asks for."""
+    ql = q.lower()
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return value
+    if re.search(r"in millions?|\(million|juta|\(mio|in mio", ql):
+        v = v / 1_000_000
+    elif re.search(r"in thousands?|\(thousand|in '?000s?|\(k\)|in k\b", ql):
+        v = v / 1000
+    else:
+        return value
+    return str(int(v)) if v == int(v) else f"{v:.1f}"
 
 
 def pick(options, want):

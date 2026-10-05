@@ -67,12 +67,26 @@ await new Promise(z=>setTimeout(z,300))}}));return JSON.stringify(out)})()""" % 
 info = json.loads(b.eval(tab, js) or "{}")
 
 # 3) filter
-done = open(os.path.join(ME.ME_DIR, "tracker.csv")).read() if os.path.exists(os.path.join(ME.ME_DIR, "tracker.csv")) else ""
+import csv
+def norm_key(company, title):
+    n = lambda x: re.sub(r"[^a-z0-9]+", " ", x.lower()).strip()
+    return n(re.sub(r"\(.*?\)|-.*$", "", company)) + "|" + n(title)
+TRK = os.path.join(ME.ME_DIR, "tracker.csv")
+done, done_keys = "", set()
+if os.path.exists(TRK):
+    done = open(TRK).read()
+    for r in list(csv.reader(open(TRK)))[1:]:
+        if len(r) > 2:
+            done_keys.add(norm_key(r[1], r[2]))
+CJK = re.compile(r"[\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]")
+knows_cjk = any(str(v).lower() not in ("", "none", "no") for k, v in ME.P.get("languages", {}).items() if k in ("japanese", "chinese", "korean", "mandarin"))
 keep = []
 for j, c in found.items():
     v = info.get(j, {})
-    if v.get("err") or v.get("applied") or j in done:
+    if v.get("err") or v.get("applied") or j in done or norm_key(c["company"], c["title"]) in done_keys:
         continue
+    if CJK.search(c["title"]) and not knows_cjk:
+        continue  # posting written in Japanese/Chinese/Korean: language required
     loc = (v.get("loc") or c["location"]).lower()
     t = c["title"]
     if BAD_TITLE.search(t) or any(w in t.lower() for w in bad_titles_extra):
