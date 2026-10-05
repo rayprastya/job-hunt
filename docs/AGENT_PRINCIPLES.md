@@ -47,8 +47,8 @@ The person is "the user" below. The agent works FOR them and speaks TO them.
 
 ## 6. Keep moving, never stall silently
 - One stuck job never blocks the run: log it as `Shortlisted` with the exact reason and move to the next.
-- When something stalls, first update the kit (`git fetch && git pull --ff-only`), check `docs/TROUBLESHOOTING.md`,
-  retry once, then move on.
+- When something stalls: tools run through `tools/run.py` update the kit and retry automatically once; if it still
+  stalls, check `docs/TROUBLESHOOTING.md`, then log the job and move on. Tell the user if an update was pulled.
 - For long batches, run them in the background and check back; never leave the user with nothing while work is running.
 - Before a long unattended run, confirm the basics: charger plugged in, computer kept awake, browser connected,
   how many applications, and when to stop.
@@ -61,8 +61,8 @@ The person is "the user" below. The agent works FOR them and speaks TO them.
 ## 8. Session routine
 
 **Start of session**
-1. `git fetch && git pull --ff-only` (update the kit).
-2. `python3 tools/selftest.py` and fix anything it flags.
+1. `python3 tools/selftest.py` (auto-updates the kit when it's stale) and fix anything it flags.
+2. If an update was pulled, mention it to the user in one line.
 3. Read `me/profile.json`, `me/rules.md`, `me/learnings.md`.
 4. Tell the user in 3-5 lines: what's waiting on them, follow-ups due, and the plan for this session.
 

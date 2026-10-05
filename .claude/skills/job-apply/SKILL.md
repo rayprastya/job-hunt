@@ -9,9 +9,10 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 (and `me/profile.md`, `me/rules.md`); never invent experience, numbers, or legal answers.
 
 ## 0. Before starting
-- Update the kit first: `git fetch && git pull --ff-only` in the kit folder (fixes for site changes land often).
-  Do the same whenever a step stalls or a site behaves differently than documented, then retry once.
-  (`me/` is gitignored, so updating never touches personal data.)
+- Run `python3 tools/selftest.py` first: it auto-updates the kit if it hasn't checked in 12 hours
+  (`tools/update.py`: fast-forward only, never touches `me/`, refuses if you edited kit files).
+- Run apply tools through `python3 tools/run.py <tool.py> ...`: if a tool stalls or crashes it updates the kit and,
+  only when new fixes arrived, retries once. If it still stalls, log the job and move on.
 - Read `me/profile.json`, `me/rules.md`, `me/config.md`. If they are missing or empty, run `python3 tools/onboard.py`.
 - Browser bridge must be running (`docs/BROWSER.md`): `curl -s -X POST http://127.0.0.1:9339/list`.
 - Ask how many applications this run (default: a small first batch of ~5 so the person can check quality).
@@ -19,7 +20,9 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 ## Tools at a glance
 | Need | Command |
 |---|---|
-| Check setup | `python3 tools/selftest.py` |
+| Check setup (auto-updates the kit) | `python3 tools/selftest.py` |
+| Update the kit now | `python3 tools/update.py` |
+| Run a tool with auto-update on stall | `python3 tools/run.py easy_apply.py <tab> <job-id> <country>` |
 | Search + filter jobs | `python3 tools/search_jobs.py --regions ID,SG,WW --days 7` -> `me/candidates.json` |
 | Drive the browser manually | `python3 tools/br.py list|open|goto|eval|click|type|key|upload|shot|close` |
 | Tailored CV to PDF | copy `templates/cv-example.html`, edit, then `python3 tools/cv_pdf.py me/cv/x.html me/cv/Name_CV.pdf` |

@@ -4,9 +4,10 @@ Every item here happened in a real run. The tools already include the fix; this 
 
 **First thing to try when anything stalls:** update the kit, then retry once.
 ```bash
-git fetch && git pull --ff-only     # in the kit folder; me/ is never touched
+python3 tools/update.py      # safe: fast-forward only, never touches me/
 ```
-Job sites change their forms often and fixes are pushed here. `python3 tools/selftest.py` also tells you when your copy is behind.
+Job sites change their forms often and fixes are pushed here. This also happens automatically: `selftest.py` updates a
+stale kit at session start, and tools started through `tools/run.py` update and retry once when they stall.
 
 ## Browser connection
 

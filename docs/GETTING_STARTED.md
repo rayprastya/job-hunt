@@ -132,7 +132,7 @@ Open your AI agent **in the install folder** and talk to it normally. Useful mes
 | "Prefill the Ashby/Greenhouse ones and I'll click submit" | For sites with a bot check: everything gets filled in browser tabs, you only click Submit. |
 | "Update my profile: ..." | Changes `me/profile.json` (e.g. new salary expectation). |
 | "Stop applying" | It stops after the current application. |
-| "Update the kit" | Runs `git fetch && git pull --ff-only` to get the latest fixes (do this before each session). |
+| "Update the kit" | Runs `python3 tools/update.py`. It also happens automatically at session start (if stale) and when a step stalls. |
 
 Things it will always ask you about (by design): GPA if you left it blank, health questions, essays a company says must
 not be written by AI, video answers, and any legal question your profile doesn't answer.
