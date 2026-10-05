@@ -33,6 +33,7 @@ Then:
 | `templates/` | Starting points for `me/` (profile, tracker, a CV HTML template). |
 | `docs/GETTING_STARTED.md` | Beginner setup guide and everyday commands. |
 | `docs/AGENT_PRINCIPLES.md` | How the agent behaves: outcome-first reports, asks only real decisions, never guesses, owns mistakes, session routine (adapted from firstmate). |
+| `docs/UPSTREAM.md` | How firstmate improvements are tracked (weekly check + "review firstmate updates"). |
 | `docs/WORKFLOW.md` | The step-by-step process the agent follows. |
 | `docs/TROUBLESHOOTING.md` | Every roadblock hit so far and its fix. |
 | `tools/` | Browser bridge (`cdpd.mjs`), form fillers, tracker + sheet sync, onboarding. |

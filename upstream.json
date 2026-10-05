@@ -1,0 +1,15 @@
+{
+  "repo": "kunchenguid/firstmate",
+  "branch": "main",
+  "last_reviewed": "f470a01c098c1536d83b802874bd954a2c04b506",
+  "last_reviewed_date": "2026-10-05",
+  "watch": [
+    "AGENTS.md",
+    ".agents/skills/ask-user-authority/",
+    ".agents/skills/diagnostic-reasoning/",
+    ".agents/skills/captain-hold-lifecycle/",
+    ".agents/skills/stow/"
+  ],
+  "maps_to": "docs/AGENT_PRINCIPLES.md",
+  "note": "Ideas are adapted, not copied. Review changes, port anything useful into docs/AGENT_PRINCIPLES.md in our own words, then mark reviewed."
+}
