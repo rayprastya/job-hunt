@@ -18,51 +18,92 @@ remote-debugging feature (the "DevTools protocol"). You turn that on in ONE of t
 
 ## Mode A: separate profile (recommended)
 
-### macOS / Linux
-```bash
-bash tools/browser-separate.sh            # Brave (default)
-bash tools/browser-separate.sh --chrome   # Chrome
-```
-### Windows (PowerShell)
-```powershell
-.\tools\browser-separate.ps1                 # Brave (default)
-.\tools\browser-separate.ps1 -Browser chrome # or edge
-```
+No settings to change in your browser: the launch script starts a second browser window with debugging already on.
 
-What happens: a NEW browser window opens with its own profile folder (`~/.job-hunt-browser`) and debugging on port 9333.
+### Step 1. Launch it
+- macOS/Linux: `bash tools/browser-separate.sh` (Chrome: add `--chrome`)
+- Windows (PowerShell): `.\tools\browser-separate.ps1` (or `-Browser chrome` / `-Browser edge`)
 
-1. In that window, sign in to **LinkedIn** and **Google** (most job sites offer "Continue with Google").
-   These logins are remembered for next time.
-2. Start the connector in a terminal and leave it running:
-   - macOS/Linux: `CDP_PORT=9333 node tools/cdpd.mjs &`
-   - Windows: `$env:CDP_PORT=9333; node tools\cdpd.mjs`
-3. Next time, just run the launch script again (step 1 logins are kept), then the connector.
+A NEW browser window opens. It looks like a fresh browser (no bookmarks, no logins). That's the job-hunt profile,
+stored in `~/.job-hunt-browser` (Windows: `%USERPROFILE%\.job-hunt-browser`).
+
+### Step 2. Log in, inside that new window (once)
+1. Go to `linkedin.com` and sign in.
+2. Go to `accounts.google.com` and sign in (so "Continue with Google" works on job sites and the tracker sheet opens).
+3. Optional: sign in to job boards you use (JobStreet, Glints, Kalibrr...).
+4. Optional but recommended: in LinkedIn open `linkedin.com/jobs/application-settings` and upload your CV once,
+   then put its file name in `me/profile.json` -> `files.linkedin_resume_name`.
+
+These logins stay saved in that profile for next time.
+
+### Step 3. Start the connector
+- macOS/Linux: `CDP_PORT=9333 node tools/cdpd.mjs &`
+- Windows: `$env:CDP_PORT=9333; node tools\cdpd.mjs`
+No "Allow" prompt appears in this mode.
+
+### Every next time
+Run step 1 (the window opens already logged in) and step 3. Keep that window open while the agent works;
+you can minimise it but don't close it.
 
 ---
 
-## Mode B: your main browser
+## Mode B: your main browser (turn on "developer mode")
 
-### 1. Turn on remote debugging ("developer mode")
-| Browser | Open this address in the address bar |
+Everything here happens **inside the browser**, no terminal needed except step 3.
+
+### Step 1. Open the remote-debugging page
+Click the address bar (where you type websites), paste the address for your browser, press Enter:
+
+| Browser | Paste this into the address bar |
 |---|---|
 | Brave | `brave://inspect/#remote-debugging` |
-| Chrome | `chrome://inspect/#remote-debugging` |
-| Edge | `edge://inspect/#remote-debugging` |
+| Google Chrome | `chrome://inspect/#remote-debugging` |
+| Microsoft Edge | `edge://inspect/#remote-debugging` |
 
-On that page, switch ON **"Allow remote debugging for this browser instance"**. The page then shows
-`Server running at: 127.0.0.1:9222`. This needs a recent browser (Chromium 144+); if you don't see the toggle, update
-the browser or use Mode A.
+(It's not a website, it's a built-in settings page, so it only works typed into the address bar.)
 
-It switches itself OFF whenever the browser restarts, so repeat this step after every restart.
+### Step 2. Switch it on
+The page looks roughly like this. Find the **Remote debugging** section near the top and tick the box:
 
-### 2. Start the connector
-- macOS/Linux: `node tools/cdpd.mjs &` (add `CDP_BROWSER=chrome` or `CDP_BROWSER=edge` if not Brave)
-- Windows: `node tools\cdpd.mjs` (or `$env:CDP_BROWSER="chrome"; node tools\cdpd.mjs`)
+```
+ ┌──────────────────────────────────────────────────────────────┐
+ │  Inspect with Chrome Developer Tools                         │
+ │  Devices | Pages | Extensions | Apps | ... | Remote debugging│  <- this tab is selected by the #remote-debugging link
+ │                                                              │
+ │  Remote debugging                                            │
+ │  [x] Allow remote debugging for this browser instance        │  <- TICK THIS
+ │      Server running at: 127.0.0.1:9222                       │  <- appears once it's on
+ └──────────────────────────────────────────────────────────────┘
+```
 
-### 3. Click "Allow"
-The browser shows a prompt asking to allow the connection. Click the browser window first, wait 2-3 seconds
-(the button is briefly disabled on purpose), then click **Allow**. If the button won't click, press Tab until it is
-highlighted and press Enter. You approve once per browser session; the connector keeps the connection open.
+- When **"Server running at: 127.0.0.1:9222"** appears, it's on.
+- No such option? Update the browser (menu > About > update) or use Mode A. It needs a recent version (Chromium 144+).
+- It turns itself **off every time the browser restarts**: repeat steps 1-2 after a restart.
+
+### Step 3. Start the connector (the AI can do this for you)
+Ask your AI agent "start the browser connector", or run it yourself:
+- macOS/Linux: `node tools/cdpd.mjs &` (Chrome: `CDP_BROWSER=chrome node tools/cdpd.mjs &`, Edge: `CDP_BROWSER=edge ...`)
+- Windows: `node tools\cdpd.mjs` (Chrome: `$env:CDP_BROWSER="chrome"; node tools\cdpd.mjs`)
+
+### Step 4. Click "Allow" in the browser
+Right after step 3, the browser pops up a small dialog, roughly:
+
+```
+ ┌──────────────────────────────────────────────┐
+ │  Allow remote debugging?                      │
+ │  An application wants to control this browser │
+ │                          [ Cancel ]  [ Allow ]│
+ └──────────────────────────────────────────────┘
+```
+- Click the browser window first, **wait 2-3 seconds** (the Allow button is greyed out briefly on purpose), then click **Allow**.
+- Button won't click? Press **Tab** until "Allow" is highlighted, then **Enter**.
+- Missed it or it disappeared? Ask the agent to restart the connector; a fresh prompt appears.
+- You'll see a bar "Brave/Chrome is being controlled by automated test software" while connected. That's expected.
+
+You approve once per browser session. If the browser restarts: steps 1, 2, 3, 4 again.
+
+### Step 5. Turn it off when you're done (optional, recommended)
+Go back to the page from step 1 and untick the box, or just restart the browser.
 
 ### Tips for Mode B
 - Close tabs you don't need first: attaching can wake sleeping tabs and slow the computer.

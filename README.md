@@ -25,6 +25,14 @@ Then:
 4. Open your AI agent in the install folder and say **"find me jobs and apply, 5 for now"**.
    Claude Code reads `CLAUDE.md`; other agents: [docs/OTHER_AI.md](docs/OTHER_AI.md).
 
+## Browser setup in 30 seconds
+The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictures: [docs/BROWSER.md](docs/BROWSER.md)):
+- **Separate window (easiest):** run `bash tools/browser-separate.sh` (Windows: `.\tools\browser-separate.ps1`),
+  log in to LinkedIn + Google in the window that opens, then `CDP_PORT=9333 node tools/cdpd.mjs &`.
+- **Your normal browser:** type `brave://inspect/#remote-debugging` (or `chrome://` / `edge://`) in the address bar,
+  tick **"Allow remote debugging for this browser instance"**, run `node tools/cdpd.mjs &`, then click **Allow**
+  in the popup. Redo after every browser restart.
+
 ## What's where
 
 | Path | What |
