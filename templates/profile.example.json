@@ -11,7 +11,13 @@
     "nationality": "",
     "linkedin": "",
     "github": "",
-    "age": ""
+    "age": "",
+    "headline": "",
+    "preferred_name": "",
+    "pronouns": "",
+    "address": "",
+    "postal_code": "",
+    "date_of_birth": ""
   },
   "target": {
     "roles": [],
@@ -45,14 +51,17 @@
         "MYR",
         10000
       ]
-    }
+    },
+    "expected_remote_usd_monthly": 0
   },
   "legal": {
     "home_country_code": "",
     "authorized_countries": [],
     "needs_sponsorship_elsewhere": false,
     "willing_to_relocate": false,
-    "willing_to_travel": false
+    "willing_to_travel": false,
+    "criminal_record": "",
+    "driving_licence": ""
   },
   "eeo": {
     "gender": "",
@@ -105,5 +114,9 @@
       "location": [],
       "origin": []
     }
+  },
+  "cover_letter": {
+    "reference_file": "",
+    "style_notes": ""
   }
 }

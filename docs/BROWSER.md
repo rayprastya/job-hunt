@@ -41,6 +41,15 @@ These logins stay saved in that profile for next time.
 - Windows: `$env:CDP_PORT=9333; node tools\cdpd.mjs`
 No "Allow" prompt appears in this mode.
 
+### Headless runs (invisible, doesn't steal focus)
+After you've logged in once in the visible window (step 2), close it and start the same profile invisibly:
+- macOS/Linux: `bash tools/browser-separate.sh --headless`
+- Windows: `.\tools\browser-separate.ps1 -Headless`
+Then step 3 as usual. Same saved logins, no window, and you can keep using your computer.
+Limits: sites with bot checks (Ashby, Greenhouse, Lever) and occasional LinkedIn checks are stricter with invisible
+browsers, so for "prefill + you click Submit" jobs use the visible window. If a login expires, open the visible
+window again, log in, and go back to headless.
+
 ### Every next time
 Run step 1 (the window opens already logged in) and step 3. Keep that window open while the agent works;
 you can minimise it but don't close it.

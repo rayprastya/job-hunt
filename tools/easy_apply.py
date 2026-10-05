@@ -26,6 +26,12 @@ def answer(q, kind, options=None):
         if k.lower() in ql:
             return pick(options, v) if options else v
     abroad = COUNTRY != ME.HOME
+    m_atleast = re.search(r"at least (\d+)\+? years?", ql)
+    if m_atleast and options:
+        need = int(m_atleast.group(1))
+        spec = [v for k, v in YEARS.items() if k not in GENERIC and re.search(r"(?<![a-z])" + re.escape(k.strip()), ql)]
+        have = max(spec) if spec else max([v for k, v in YEARS.items() if k in GENERIC] or [0])
+        return pick(options, "Yes" if have >= need else "No")
     if re.search(r"how many years|years of (work )?experience|years experience|how much experience", ql):
         if re.match(r"\s*years of (work )?experience\s*[-:?*]*\s*$", ql):
             return "5"
@@ -51,6 +57,13 @@ def answer(q, kind, options=None):
                     return o
             return None
         return str(int(ME.NOTICE_WEEKS) * 7) if kind == "number" else ME.NOTICE
+    if re.search(r"salary|compensation|expected pay|ctc|remuneration", ql) and re.search(r"\busd\b|us\$|\$", ql) and "current" not in ql:
+        usd = ME.P["pay"].get("expected_remote_usd_monthly")
+        if usd:
+            if re.search(r"annual|yearly|per year|per annum", ql):
+                return str(int(usd) * 12)
+            return str(usd)
+        return None
     if re.search(r"salary|compensation|expected pay|ctc|remuneration", ql):
         if "current" in ql:
             if COUNTRY == ME.HOME or ME.HOME_CUR.lower() in ql:
@@ -203,6 +216,25 @@ def answer(q, kind, options=None):
         return pick(options, "No")
     if re.search(r"mental health|medical history|psychiatric", ql):
         return pick(options, ME.MENTAL_HEALTH) if (ME.MENTAL_HEALTH and options) else (ME.MENTAL_HEALTH or None)
+    I = ME.P["identity"]
+    if re.search(r"\bheadline\b|professional title|current title", ql):
+        return I.get("headline") or None
+    if re.search(r"preferred (first )?name|nickname", ql):
+        return I.get("preferred_name") or ME.FIRST
+    if re.search(r"pronoun", ql):
+        return pick(options, I["pronouns"]) if (options and I.get("pronouns")) else (I.get("pronouns") or None)
+    if re.search(r"postal|zip ?code|post ?code", ql):
+        return I.get("postal_code") or None
+    if re.search(r"street|address line|home address|residential address", ql):
+        return I.get("address") or None
+    if re.search(r"date of birth|birth ?date|\bdob\b", ql):
+        return I.get("date_of_birth") or None
+    if re.search(r"criminal|convicted|offen[cs]e", ql) and options:
+        v = ME.P.get("legal", {}).get("criminal_record")
+        return pick(options, v) if v else None
+    if re.search(r"driv(er|ing)'?s? licen[cs]e", ql) and options:
+        v = ME.P.get("legal", {}).get("driving_licence")
+        return pick(options, v) if v else None
     if re.search(r"\bage\b|how old", ql):
         return ME.AGE or None
     if re.search(r"bonus", ql):

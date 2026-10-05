@@ -57,6 +57,10 @@ Answer from the profile when the user has given it during onboarding: GPA/degree
 "why us?" (tailor `motivation.summary` to the company, never invent facts), standard acknowledgements
 (`consent.policy_acknowledgements`), marketing opt-ins (`consent.marketing_optins`, default No).
 
+Cover letters and "why us?" texts: read `cover_letter.reference_file` (a letter the user likes) and
+`cover_letter.style_notes`, mirror that tone and structure, use only true facts from the CV/profile, and tailor to the
+company. Save each one in `me/cover_letters/<company>.md` so the user can see what was sent.
+
 Never answer on the user's behalf: personal essays a company says must not be AI-written, health/medical
 questions not in the profile, GPA if blank, video questions, anything legal that isn't in the profile.
 

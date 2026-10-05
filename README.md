@@ -39,6 +39,7 @@ Then:
 The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictures: [docs/BROWSER.md](docs/BROWSER.md)):
 - **Separate window (easiest):** run `bash tools/browser-separate.sh` (Windows: `.\tools\browser-separate.ps1`),
   log in to LinkedIn + Google in the window that opens, then `CDP_PORT=9333 node tools/cdpd.mjs &`.
+  Later runs can be invisible: `bash tools/browser-separate.sh --headless` (same logins, doesn't steal focus).
 - **Your normal browser:** type `brave://inspect/#remote-debugging` (or `chrome://` / `edge://`) in the address bar,
   tick **"Allow remote debugging for this browser instance"**, run `node tools/cdpd.mjs &`, then click **Allow**
   in the popup. Redo after every browser restart.
