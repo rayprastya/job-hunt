@@ -54,7 +54,7 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 | Breezy (`*.breezy.hr`, e.g. Kredivo) | Automatic | Resume parsing can mis-fill work history; check entries. Use a real mouse click for Submit. |
 | Zoho Recruit (e.g. HFM) | Automatic | Dismiss the cookie banner first; "Annual Salary Expectation" + currency dropdown + policy checkbox. |
 | Ashby (`jobs.ashbyhq.com`) | Prefill only | Invisible bot check blocks automated Submit. `ashby_apply.py --dry-run` fills everything; you click Submit. |
-| Greenhouse (`job-boards.greenhouse.io`) | Prefill only | reCAPTCHA; selects are react-select (open the control, type, click option); address "Country" is a separate select from phone country. |
+| Greenhouse (`job-boards.greenhouse.io`) | Prefill only | reCAPTCHA. Dropdowns: open the control (a second click may be needed when another menu was open), click the option; typing the full option text can filter everything out, so type only a short prefix. The phone "Country" flyout isn't automated yet: `gh_apply.py` prints a CHECK line and you pick it in one click before Submit. |
 | Lever (`jobs.lever.co`) | Prefill only | hCaptcha. |
 | Sea / Shopee / Garena careers | Needs GPA | Form requires CGPA and degree classification. |
 | Workday | Manual | Needs an account per company. |

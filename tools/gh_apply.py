@@ -42,19 +42,34 @@ def click_el(expr):
 
 
 def gh_select(label_sub, option):
-    """react-select: open the control under the label, type to filter, click the first visible option."""
+    """react-select: open the control under the label and click the matching option. Retries because menus render
+    late and a click can just close another open menu; types a short prefix for long lists."""
     ctrl = ("(()=>{const l=[...document.querySelectorAll('label')].find(l=>l.innerText.toLowerCase().includes(%s));"
             "let n=l;for(let i=0;i<5&&n;i++){n=n.parentElement;const c=n&&n.querySelector('[class*=select__control]');if(c)return c}return null})()") % json.dumps(label_sub.lower())
-    if not click_el(ctrl):
+    pick = ("[...document.querySelectorAll('[class*=select__option]')].filter(o=>o.offsetParent)"
+            ".find(o=>o.innerText.trim().toLowerCase().startsWith(%s))") % json.dumps(option.lower())
+    if not ev("!!" + ctrl):
         return "no field"
-    raw("Input.insertText", {"text": option}); time.sleep(1.5)
-    if not click_el("[...document.querySelectorAll('[class*=select__option]')].filter(o=>o.offsetParent)[0]"):
-        return "no option"
-    return "ok"
+    for attempt in range(3):
+        click_el(ctrl)
+        for _ in range(6):
+            if ev("[...document.querySelectorAll('[class*=select__option]')].some(o=>o.offsetParent)"):
+                break
+            time.sleep(0.5)
+        if click_el(pick):
+            return "ok"
+        if attempt == 1:
+            raw("Input.insertText", {"text": option[:4]}); time.sleep(1.2)
+            if click_el(pick):
+                return "ok"
+        raw("Input.dispatchKeyEvent", {"type": "rawKeyDown", "key": "Escape", "code": "Escape", "windowsVirtualKeyCode": 27})
+        time.sleep(0.5)
+    return "no option"
 
 
 ev("(()=>{document.querySelectorAll('[aria-expanded=true]').forEach(e=>e.blur());return 1})()")
-gh_select("country", ME.COUNTRY_NAME)  # address country (required on many boards)
+# address country (required on many boards): its label is exactly "Country"
+phone_country_note = bool(ev("!!document.getElementById('country')"))  # flyout picker: not automated yet (see TROUBLESHOOTING)
 for sub, v in ANS.get("select", {}).items():
     r = gh_select(sub, v)
     if r != "ok":
@@ -64,6 +79,8 @@ for sub in ANS.get("check", []):
     if r != True: print("CHECK_FAIL", sub, r)
 time.sleep(1)
 print("STATE", ev("JSON.stringify([...document.querySelectorAll('input:not([type=hidden]):not([type=file]):not([type=checkbox]):not([type=search])')].map(e=>%s(e).slice(0,30)+'='+e.value.slice(0,30)).concat([...document.querySelectorAll('[class*=singleValue]')].map(s=>'sel:'+s.innerText)))" % LAB))
+if phone_country_note:
+    print("CHECK: pick your phone country (" + ME.COUNTRY_NAME + ") in the form's Country field before submitting")
 if SUBMIT:
     ev("(()=>{[...document.querySelectorAll('button')].find(b=>/submit/i.test(b.innerText)).click();return 1})()")
     time.sleep(10)

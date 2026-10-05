@@ -116,6 +116,12 @@ def answer(q, kind, options=None):
         if COUNTRY == ME.HOME:
             return pick(options, "Citizen") or pick(options, f"{ME.NATIONALITY} Citizen")
         return pick(options, "Foreigner") or pick(options, "Others")
+    m = re.search(r"(?:proficiency|fluency|level) in ([a-z]+)", ql) or re.search(r"\b([a-z]+) (?:language )?(?:level|proficiency)\b", ql)
+    lang = m.group(1) if m else None
+    if lang and lang not in ("english", "japanese", "language", "your", "the") and options:
+        known = {k.lower(): v for k, v in ME.P.get("languages", {}).items()}
+        level = known.get(lang, "None")
+        return pick(options, level) or pick(options, "None") or pick(options, "No")
     if re.search(r"japanese|日本語", ql):
         if options:
             for o in options:
