@@ -1,0 +1,25 @@
+# Safety net for the private me/ folder. Even if you sync me/ through a PRIVATE git repo,
+# never commit secrets or login data:
+.env
+*.env
+.env.*
+*secret*
+*token*
+*credential*
+*password*
+*passwd*
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa*
+*.ovpn
+cookies*
+Cookies*
+*.sqlite
+*.sqlite3
+*.db
+Login Data*
+browser-profile/
+.job-hunt-browser/
+.DS_Store

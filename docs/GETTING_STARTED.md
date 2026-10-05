@@ -141,6 +141,13 @@ Read the **Notes** column in the sheet: it says what's waiting on you and flags 
 
 ---
 
+## Your private data stays private
+- `me/` is ignored by the kit's git, so it is never pushed with the public kit.
+- `me/.gitignore` additionally blocks secrets (`.env`, keys, tokens, passwords, cookies, browser profiles) even if you
+  sync `me/` through your own private git repo.
+- A pre-commit guard (`tools/guard_commit.py`, installed by the installer) refuses any commit to the kit that contains
+  `me/` files or your email/phone/name. Never put passwords anywhere in the kit: you log in inside the browser.
+
 ## Using it on another computer
 
 1. On the new computer: install the kit again (Option A or B).
