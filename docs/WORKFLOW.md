@@ -21,6 +21,7 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 | Search + filter jobs | `python3 tools/search_jobs.py --regions ID,SG,WW --days 7` -> `me/candidates.json` |
 | Drive the browser manually | `python3 tools/br.py list|open|goto|eval|click|type|key|upload|shot|close` |
 | Tailored CV to PDF | copy `templates/cv-example.html`, edit, then `python3 tools/cv_pdf.py me/cv/x.html me/cv/Name_CV.pdf` |
+| Save a no-no / preference | `python3 tools/prefs.py avoid title "blockchain" --reason "..."` |
 | Log / sync | `python3 tools/log.py ...`, `python3 tools/sheet_push.py` |
 (On Windows use `python` instead of `python3`.)
 
@@ -31,7 +32,7 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
   Pause ~2 s between requests or LinkedIn returns empty pages.
 - Enrich each job with `/voyager/api/jobs/jobPostings/<id>` (csrf-token header = JSESSIONID cookie):
   apply method, company apply URL, already-applied flag, description.
-- Filter out: already applied, skip companies/countries from the profile, titles outside the target,
+- Filter out: already applied, learned no-nos (`preferences.avoid`, see `me/preferences.md`), skip companies/countries from the profile, titles outside the target,
   local-language-required roles, "must already live in X / citizens only" roles.
 - Also scan LinkedIn content search for hiring posts; log good ones as leads (never email people on the user's behalf).
 

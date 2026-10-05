@@ -136,5 +136,21 @@
   "consent": {
     "policy_acknowledgements": true,
     "marketing_optins": false
+  },
+  "preferences": {
+    "avoid": {
+      "company": [],
+      "title": [],
+      "text": [],
+      "location": [],
+      "origin": []
+    },
+    "prefer": {
+      "company": [],
+      "title": [],
+      "text": [],
+      "location": [],
+      "origin": []
+    }
   }
 }

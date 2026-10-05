@@ -30,6 +30,7 @@ if ($me -ne "$dest\me") { cmd /c mklink /J "$dest\me" "$me" | Out-Null }
 if (-not (Test-Path "$me\tracker.csv")) { Copy-Item "templates\tracker.csv" "$me\tracker.csv" }
 if (-not (Test-Path "$me\learnings.md")) { Copy-Item "templates\learnings.md" "$me\learnings.md" }
 if (-not (Test-Path "$me\.gitignore")) { Copy-Item "templates\me.gitignore" "$me\.gitignore" }
+if (-not (Test-Path "$me\preferences.md")) { Copy-Item "templates\preferences.md" "$me\preferences.md" }
 if (Test-Path ".git") { Set-Content -Path ".git\hooks\pre-commit" -Value "#!/bin/sh`nexec python tools/guard_commit.py" -NoNewline }
 
 Write-Host "`n4/5  A few questions so the agent can fill applications for you (Enter to skip)" -ForegroundColor Cyan

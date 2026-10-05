@@ -53,17 +53,28 @@ The person is "the user" below. The agent works FOR them and speaks TO them.
 - Before a long unattended run, confirm the basics: charger plugged in, computer kept awake, browser connected,
   how many applications, and when to stop.
 
-## 7. Diagnose before fixing
+## 7. Learn the user's no-nos (and likes)
+- Whenever the user rejects a job or a kind of job ("no crypto", "not that company", "no onsite in Surabaya",
+  "I don't want contract roles"), turn it into a rule right away:
+  `python3 tools/prefs.py avoid <company|title|text|location|origin> "<value>" --reason "<their words>"`.
+  Likes work the same way with `prefer` (ranked first in searches).
+- Pick the narrowest rule that captures what they meant. If it's ambiguous (just this company, or all similar
+  companies?), ask once, then save.
+- Confirm in one line: "Noted: no more crypto roles. I'll skip them from now on."
+- Also re-check jobs already waiting in the tracker against the new rule and mark matches `Skipped`.
+- `me/preferences.md` keeps the history and reasons; never delete a rule unless the user changes their mind.
+
+## 8. Diagnose before fixing
 - When a form misbehaves, look before changing code: screenshot it, read the visible error, find which field is wrong.
 - Separate the cause from the symptom (e.g. "no Easy Apply button" was actually "tab in background", and later
   "daily limit reached"). Fix the cause, then write it down.
 
-## 8. Session routine
+## 9. Session routine
 
 **Start of session**
 1. `python3 tools/selftest.py` (auto-updates the kit when it's stale) and fix anything it flags.
 2. If an update was pulled, mention it to the user in one line.
-3. Read `me/profile.json`, `me/rules.md`, `me/learnings.md`.
+3. Read `me/profile.json`, `me/rules.md`, `me/preferences.md`, `me/learnings.md`.
 4. Tell the user in 3-5 lines: what's waiting on them, follow-ups due, and the plan for this session.
 
 **End of session (or when the user says stop)**
@@ -74,10 +85,11 @@ The person is "the user" below. The agent works FOR them and speaks TO them.
 4. Final message: applied (count + notable ones), waiting on the user (exact questions), anything flagged as possibly
    wrong, next suggested step.
 
-## 9. Where knowledge goes
+## 10. Where knowledge goes
 | Kind of knowledge | Where |
 |---|---|
-| The user's answers and preferences | `me/profile.json`, `me/rules.md` |
+| The user's answers | `me/profile.json`, `me/rules.md` |
+| Jobs/companies/kinds of work the user doesn't want (or prefers) | `tools/prefs.py` -> `profile.json` `preferences` + history in `me/preferences.md` |
 | Personal lessons ("this recruiter prefers X", "I already applied to Y in March") | `me/learnings.md` |
 | Lessons any user would hit (site changes, bugs, workarounds) | `docs/TROUBLESHOOTING.md` in the kit |
 | What happened with each job | `me/tracker.csv` (Notes column) and the Google Sheet |

@@ -8,6 +8,7 @@ import argparse, html, json, os, re, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import me as ME
 from br import Bridge
+import prefs as PREFS
 
 GEO = {"ID": "102478259", "SG": "102454443", "MY": "106808692", "JP": "101355337", "WW": "92000000", "TH": "105146118",
        "VN": "104195383", "HK": "103291313", "TW": "104187078", "AE": "104305776", "NL": "102890719", "DE": "101282230",
@@ -87,9 +88,15 @@ for j, c in found.items():
     origins = [o.lower() for o in ME.P["target"].get("skip_company_origins", [])]
     if any(len(re.findall(r"\b" + re.escape(o) + r"\b", d.lower())) >= 2 for o in origins):
         flags.append("company-origin?")
+    bad, good = PREFS.check(t, c["company"], loc, d)
+    if bad:
+        continue  # learned "no-no" (me/preferences.md explains why)
+    if good:
+        flags.append(f"preferred:{good[1]}")
     url = v.get("url") or f"https://www.linkedin.com/jobs/view/{j}/"
     keep.append({**c, "location": v.get("loc") or c["location"], "apply": v.get("apply"), "url": url, "flags": flags, "desc": d})
 
+keep.sort(key=lambda k: not any(f.startswith("preferred:") for f in k["flags"]))
 json.dump(keep, open(os.path.join(ME.ME_DIR, "candidates.json"), "w"), indent=1, ensure_ascii=False)
 print(f"kept {len(keep)} -> me/candidates.json (review flags before applying)")
 for k in keep[:200]:

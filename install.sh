@@ -34,6 +34,7 @@ if [ "$ME" != "$DEST/me" ]; then ln -sfn "$ME" "$DEST/me"; fi
 [ -f "$ME/tracker.csv" ] || cp templates/tracker.csv "$ME/tracker.csv"
 [ -f "$ME/learnings.md" ] || cp templates/learnings.md "$ME/learnings.md"
 [ -f "$ME/.gitignore" ] || cp templates/me.gitignore "$ME/.gitignore"
+[ -f "$ME/preferences.md" ] || cp templates/preferences.md "$ME/preferences.md"
 # guard: refuse commits to the public kit that contain me/ files or your personal details
 if [ -d .git ]; then printf '#!/bin/sh\nexec python3 tools/guard_commit.py\n' > .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit; fi
 
