@@ -61,6 +61,12 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 | Dealls quick apply | Manual | Button doesn't open from automation; use the Dealls app. |
 | Tether / video questions | Manual | Some forms require a recorded video. |
 
+## Dropdowns in general
+Do what a person does: open the dropdown, **type a short prefix** to filter (typing the full text sometimes filters
+everything out), and if the option still isn't visible, **clear the filter and scroll the list** until it appears,
+then click it. Native `<select>` elements can be set directly by option text. `gh_apply.py` implements this
+type-then-scroll fallback; reuse the same pattern for any new site.
+
 ## Google Sheet sync
 
 | Symptom | Cause | Fix |

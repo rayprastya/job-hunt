@@ -59,9 +59,21 @@ def gh_select(label_sub, option):
         if click_el(pick):
             return "ok"
         if attempt == 1:
+            # 1) type a short prefix to filter (full text can filter everything out)
             raw("Input.insertText", {"text": option[:4]}); time.sleep(1.2)
             if click_el(pick):
                 return "ok"
+            # 2) no luck typing: clear the filter and scroll through the list until the option shows up
+            for _ in range(4):
+                raw("Input.dispatchKeyEvent", {"type": "rawKeyDown", "key": "Backspace", "code": "Backspace", "windowsVirtualKeyCode": 8})
+            time.sleep(0.8)
+            for _ in range(40):
+                if click_el(pick):
+                    return "ok"
+                more = ev("(()=>{const m=document.querySelector('[class*=select__menu-list]');if(!m)return false;const before=m.scrollTop;m.scrollTop+=m.clientHeight*0.8;return m.scrollTop>before})()")
+                if not more:
+                    break
+                time.sleep(0.3)
         raw("Input.dispatchKeyEvent", {"type": "rawKeyDown", "key": "Escape", "code": "Escape", "windowsVirtualKeyCode": 27})
         time.sleep(0.5)
     return "no option"
