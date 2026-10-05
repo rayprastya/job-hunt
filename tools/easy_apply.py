@@ -8,6 +8,7 @@ import json, os, re, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ax import AX, post
 import me as ME
+from tabs import close_tab
 
 TAB, JOB, COUNTRY = sys.argv[1], sys.argv[2], sys.argv[3].replace("HOME", "")
 DRY = "--dry-run" in sys.argv
@@ -342,7 +343,7 @@ for step in range(12):
         a.click(d[-1]); time.sleep(1); continue
     sent = [n for n in a.nodes() if n["role"] in ("StaticText", "heading") and re.search(r"application was sent|Your application was sent|Application submitted", n["name"])]
     if sent:
-        print("SUBMITTED", json.dumps(answered_log)); sys.exit(0)
+        print("SUBMITTED", json.dumps(answered_log)); close_tab(TAB); sys.exit(0)
 
     # resume: pick the Metatech-free CV saved in LinkedIn's resume library
     cvr = [n for n in ns if n["role"] in ("radio", "button") and ME.P["files"].get("linkedin_resume_name") and ME.P["files"]["linkedin_resume_name"] in n["name"]]
@@ -454,5 +455,5 @@ for step in range(12):
 
 for n in a.nodes():
     if n["role"] in ("StaticText", "heading") and re.search(r"application was sent|Application submitted", n["name"]):
-        print("SUBMITTED", json.dumps(answered_log)); sys.exit(0)
+        print("SUBMITTED", json.dumps(answered_log)); close_tab(TAB); sys.exit(0)
 print("UNKNOWN_END"); sys.exit(3)

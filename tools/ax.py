@@ -4,9 +4,9 @@ Library use:  from ax import AX; a = AX(tab); nodes = a.nodes(); a.click(node); 
 CLI:          python3 ax.py <tab> dump [filter-substring]
 Talks to the Brave bridge (tools/cdpd.mjs) on 127.0.0.1:9339.
 """
-import json, sys, time, urllib.request
+import json, os, sys, time, urllib.request
 
-B = "http://127.0.0.1:9339"
+B = os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339")
 INTERACTIVE = {"button", "textbox", "combobox", "checkbox", "radio", "listbox", "option", "spinbutton", "link", "searchbox", "menuitem"}
 
 

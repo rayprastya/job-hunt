@@ -9,7 +9,12 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 - Run apply tools through `python3 tools/run.py <tool.py> ...`: if a tool stalls or crashes it updates the kit and,
   only when new fixes arrived, retries once. If it still stalls, log the job and move on.
 - Read `me/profile.json`, `me/rules.md`, `me/config.md`. If they are missing or empty, run `python3 tools/onboard.py`.
-- Browser bridge must be running (`docs/BROWSER.md`): `curl -s -X POST http://127.0.0.1:9339/list`.
+- Browser bridge must be running (`docs/BROWSER.md`): `curl -s -X POST http://127.0.0.1:9339/list`
+  (another port: set `BRIDGE_PORT` for `cdpd.mjs` and `BRIDGE_URL=http://127.0.0.1:<port>` for the tools).
+- **The Google Sheet is the source of truth.** Run `python3 tools/sheet_push.py --pull` before searching or applying:
+  it merges the sheet into `me/tracker.csv` (edits, added and deleted rows in the sheet win), so a job the user marked
+  Applied, Rejected or Skipped in the sheet is never applied to again.
+- Run `python3 tools/tabs.py sweep --close`: tabs where the user already clicked Submit get marked Applied and closed.
 - Ask how many applications this run (default: a small first batch of ~5 so the person can check quality).
 
 ## Tools at a glance
@@ -57,6 +62,17 @@ Answer from the profile when the user has given it during onboarding: GPA/degree
 "why us?" (tailor `motivation.summary` to the company, never invent facts), standard acknowledgements
 (`consent.policy_acknowledgements`), marketing opt-ins (`consent.marketing_optins`, default No).
 
+Cover letters: follow `cover_letter.mode`. `auto` = write one whenever the form has a cover letter field;
+`required` = only when the field is required; `ask` or blank = the first time a form offers one, ask the user once
+with options (write them automatically / only when required / never / ask each time) and save the choice to
+`cover_letter.mode`. If there's no reference letter or style yet, offer a default (short, 3 paragraphs, specific to
+the company, no cliches) or ask for an example.
+
+Pay for a country with no saved number (`pay.abroad_monthly`): if `pay.when_missing` is `research`, look up the
+market rate (Glassdoor, Levels.fyi, Nodeflair, Payscale, the posting itself) and use a fair mid-to-upper figure; if it
+is `ask` or blank, ask the user with options: (a) they give a number, (b) the agent researches the market rate and
+uses it, (c) skip pay questions for that country. Save the answer to `pay.abroad_monthly` so it's asked only once.
+
 Cover letters and "why us?" texts: read `cover_letter.reference_file` (a letter the user likes) and
 `cover_letter.style_notes`, mirror that tone and structure, use only true facts from the CV/profile, and tailor to the
 company. Save each one in `me/cover_letters/<company>.md` so the user can see what was sent.
@@ -65,7 +81,10 @@ Never answer on the user's behalf: personal essays a company says must not be AI
 questions not in the profile, GPA if blank, video questions, anything legal that isn't in the profile.
 
 ## 4. Log and report
+- After a confirmed submission the apply tools close their tab themselves (`KEEP_TABS=1` keeps it). Close any other
+  tab you opened for a job once it's logged; never close tabs the user opened.
 - After every submission: `python3 tools/log.py <company> <role> <location> <remote> <url> <source> <fit> <status> <notes>`.
-- Every ~10 applications: `python3 tools/sheet_push.py <sheet-tab-id>`.
+- Every ~10 applications and at the end: `python3 tools/sheet_push.py <sheet-tab-id>` (pulls the sheet first, merges,
+  then writes the merged list back, so edits the user made in the sheet meanwhile are kept).
 - End of run: summary of applied / waiting on the user (with the exact question) / skipped and why, plus any
   answer that may have been wrong.

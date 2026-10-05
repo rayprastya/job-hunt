@@ -14,8 +14,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from answers import get_answer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import me as ME
+from tabs import close_tab
 CV = ME.require_cv()
-B = "http://127.0.0.1:9339"
+B = os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339")
 
 BASE = {
     "full name": ME.FULL_NAME, "name": ME.FULL_NAME, "first name": ME.FIRST, "last name": ME.LAST, "middle name": "",
@@ -119,5 +120,5 @@ for _ in range(15):
     time.sleep(2)
     t = ev("document.body.innerText.slice(0,3000)")
     if "successfully submitted" in t.lower() or "thank you for applying" in t.lower() or "application was submitted" in t.lower():
-        print("SUBMITTED"); sys.exit(0)
+        print("SUBMITTED"); close_tab(TAB); sys.exit(0)
 print("UNKNOWN_END", ev("[...document.querySelectorAll('[class*=error]')].map(e=>e.innerText).join(' | ').slice(0,500)")); sys.exit(3)

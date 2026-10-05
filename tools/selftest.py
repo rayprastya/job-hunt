@@ -31,7 +31,7 @@ try:
 except Exception as e:
     check("profile", False, f"{e} (run python3 tools/onboard.py)")
 try:
-    tabs = json.load(urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:9339/list", b"{}"), timeout=5))
+    tabs = json.load(urllib.request.urlopen(urllib.request.Request(os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339") + "/list", b"{}"), timeout=5))
     check("browser bridge running", tabs.get("ok"), "see docs/BROWSER.md")
 except Exception:
     check("browser bridge running", False, "start it: node tools/cdpd.mjs (see docs/BROWSER.md)")

@@ -104,5 +104,5 @@ ws.onopen = async () => {
         }
       });
     })
-    .listen(9339, "127.0.0.1", () => console.log("bridge on 127.0.0.1:9339"));
+    .listen(Number(process.env.BRIDGE_PORT || 9339), "127.0.0.1", () => console.log(`bridge on 127.0.0.1:${process.env.BRIDGE_PORT || 9339}`));
 };

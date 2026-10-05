@@ -11,7 +11,7 @@ import me as ME
 CV = ME.require_cv()
 
 def post(c, b):
-    d = json.load(urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:9339/" + c, json.dumps(b).encode()), timeout=60))
+    d = json.load(urllib.request.urlopen(urllib.request.Request(os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339") + "/" + c, json.dumps(b).encode()), timeout=60))
     if not d["ok"]: raise RuntimeError(d["error"])
     return d.get("out")
 def ev(js): return post("eval", {"id": TAB, "expr": js})

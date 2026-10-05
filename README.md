@@ -53,7 +53,8 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
 | "Show me what's waiting on me" | Jobs it couldn't finish, with the exact question it needs you to answer. |
 | "No more crypto roles" / "skip that company" | Saved as a rule; future searches skip it (see *Learns your no-nos*). |
 | "Prefill the bot-check ones, I'll click submit" | Ashby/Greenhouse/Lever forms filled in browser tabs; you only click Submit. |
-| "Sync the sheet" | Pastes the tracker into your Google Sheet. |
+| "Sync the sheet" | Reads your Google Sheet (it's the source of truth), merges, and writes the result back. |
+| "Clean up my tabs" | Finds application tabs you already submitted, marks them Applied, closes them. |
 | "Update the kit" | Pulls the latest fixes (also happens automatically, see below). |
 | "Stop applying" | Stops after the current application and summarises. |
 
@@ -69,6 +70,9 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
   `me/preferences.md`. Manage manually with `python3 tools/prefs.py list|avoid|prefer|remove`.
 - **Keeps itself updated.** At session start it updates a stale kit (`tools/update.py`: fast-forward only, never
   touches `me/`); tools started through `tools/run.py` update and retry once when they stall.
+- **The sheet is the source of truth.** Mark a job Applied/Rejected/Skipped in the sheet and the agent respects it;
+  every sync reads the sheet before writing to it ([docs/SHEETS.md](docs/SHEETS.md)).
+- **Leaves no clutter:** a tab is closed as soon as its application is confirmed.
 - **Never stalls on one job:** stuck jobs are logged with the reason and it moves on.
 - **Keeps your data private:** `me/` is never pushed; `me/.gitignore` blocks secrets (keys, tokens, cookies, `.env`)
   even in a private repo; a pre-commit guard refuses commits containing `me/` files or your email/phone/name.
@@ -92,7 +96,7 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
 
 **Tools:** `selftest.py` (check + auto-update), `update.py`, `run.py` (stall retry), `search_jobs.py`, `prefs.py`,
 `easy_apply.py`, `sr_apply.py` (SmartRecruiters), `ashby_apply.py`, `gh_apply.py` (Greenhouse), `answers.py`,
-`log.py`, `sheet_create.py`, `sheet_push.py`, `cv_pdf.py`, `br.py` (browser CLI), `cdpd.mjs` (browser connector), `onboard.py`,
+`log.py`, `sheet_create.py`, `sheet_push.py` (two-way sync), `tabs.py` (close finished tabs), `cv_pdf.py`, `br.py` (browser CLI), `cdpd.mjs` (browser connector), `onboard.py`,
 `guard_commit.py`, `upstream_check.py`, `browser-separate.sh/.ps1`.
 
 ## Known limits (by design or by the sites)

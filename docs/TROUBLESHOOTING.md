@@ -18,6 +18,8 @@ stale kit at session start, and tools started through `tools/run.py` update and 
 | Connection works but new tabs stay blank ("Untitled") | A stale connection from an earlier attempt | Restart the browser, re-enable `brave://inspect/#remote-debugging`, restart `node tools/cdpd.mjs`. |
 | `chrome-devtools-axi`/MCP tools: "pageId expected number" | That tool doesn't support the main-browser (toggle) connection mode | Use `tools/cdpd.mjs` instead. |
 | Pages in background tabs don't load or clicks land at (0,0) | Background tabs aren't rendered | Tools call `/activate` to bring their tab to the front before acting. Don't use the browser while a batch runs, or use a separate profile/window. |
+| `cdpd.mjs` exits with `EADDRINUSE` | Another program (or a second connector) already uses port 9339 | Run it on another port: `BRIDGE_PORT=9341 node tools/cdpd.mjs &`, then prefix tools with `BRIDGE_URL=http://127.0.0.1:9341`. Lets the main-browser and separate-profile connectors run side by side. |
+| Finished application tabs pile up | Forms you submitted by hand stay open | `python3 tools/tabs.py sweep --close` marks them Applied and closes them; apply tools close their own tab after a confirmed submit. |
 | Copying login cookies from your main profile is blocked by the agent's safety check | Moving session credentials is treated as sensitive | Log in once in the separate profile (Sign in with Google makes it quick), or use the main browser. |
 
 ## LinkedIn Easy Apply
@@ -76,6 +78,8 @@ type-then-scroll fallback; reuse the same pattern for any new site.
 |---|---|---|
 | Typed text didn't land in cells | Sheets ignores inserted text when no cell is in edit mode | `sheet_push.py` pastes a TSV block with a synthetic paste event at A1 instead. |
 | Paste overwrote the header | Selection was A1 after load | The tracker CSV (header included) is pasted whole at A1, so the sheet is always a full mirror. |
+| A status you changed in the sheet was overwritten | Older kits pushed the local file over the sheet | `sheet_push.py` now reads the sheet first and merges (sheet edits win). Update the kit. |
+| "could not read the sheet" | Not logged in to Google in the connected browser, or the link in `me/config.md` points at another tab | Log in in that browser; check the `gid=` in the saved link matches the tracker tab. |
 | Old rows stayed at the bottom after the tracker shrank | A paste only overwrites the cells it covers | `sheet_push.py` pastes 60 blank rows after the data to clear leftovers. |
 
 ## Agent harness (Claude Code)

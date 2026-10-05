@@ -13,8 +13,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from answers import get_answer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import me as ME
+from tabs import close_tab
 CV = ME.require_cv()
-B = "http://127.0.0.1:9339"
+B = os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339")
 
 HELPERS = r"""
 window.__deep=function(sel,root=document){const out=[];const walk=r=>{r.querySelectorAll(sel).forEach(e=>out.push(e));r.querySelectorAll('*').forEach(e=>{if(e.shadowRoot)walk(e.shadowRoot)})};walk(root);return out};
@@ -105,7 +106,7 @@ time.sleep(6)
 for _ in range(4):
     url = ev("location.href")
     if "/success" in url:
-        print("SUBMITTED"); sys.exit(0)
+        print("SUBMITTED"); close_tab(TAB); sys.exit(0)
     # Singapore citizenship-status select: foreign national needing sponsorship -> "Foreigner - EP"
     if ev("__deep('sr-question-field-select').some(q=>/citizenship status/i.test(q.textContent))"):
         ev("(()=>{const q=__deep('sr-question-field-select').find(q=>/citizenship status/i.test(q.textContent));const i=__deep('input',q.shadowRoot||q)[0];i.focus();i.click();return 1})()")

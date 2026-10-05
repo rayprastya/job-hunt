@@ -52,7 +52,8 @@
         10000
       ]
     },
-    "expected_remote_usd_monthly": 0
+    "expected_remote_usd_monthly": 0,
+    "when_missing": ""
   },
   "legal": {
     "home_country_code": "",
@@ -116,6 +117,7 @@
     }
   },
   "cover_letter": {
+    "mode": "",
     "reference_file": "",
     "style_notes": ""
   }

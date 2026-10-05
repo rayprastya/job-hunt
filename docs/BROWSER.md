@@ -121,6 +121,15 @@ Go back to the page from step 1 and untick the box, or just restart the browser.
 
 ---
 
+## Running two connectors, or port 9339 is taken
+The connector listens on port 9339. To use another port (for example a separate-profile connector next to the
+main-browser one, or when something else holds 9339):
+```bash
+BRIDGE_PORT=9341 CDP_PORT=9333 node tools/cdpd.mjs &
+BRIDGE_URL=http://127.0.0.1:9341 python3 tools/selftest.py
+```
+Every tool reads `BRIDGE_URL`. Windows PowerShell: `$env:BRIDGE_PORT=9341` / `$env:BRIDGE_URL="http://127.0.0.1:9341"`.
+
 ## Check that it works
 ```bash
 python3 tools/selftest.py          # Windows: python tools\selftest.py
