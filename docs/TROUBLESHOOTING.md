@@ -2,6 +2,12 @@
 
 Every item here happened in a real run. The tools already include the fix; this file explains it so you (or your agent) can recognise it quickly.
 
+**First thing to try when anything stalls:** update the kit, then retry once.
+```bash
+git fetch && git pull --ff-only     # in the kit folder; me/ is never touched
+```
+Job sites change their forms often and fixes are pushed here. `python3 tools/selftest.py` also tells you when your copy is behind.
+
 ## Browser connection
 
 | Symptom | Cause | Fix |

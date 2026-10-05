@@ -4,6 +4,9 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 (and `me/profile.md`, `me/rules.md`); never invent experience, numbers, or legal answers.
 
 ## 0. Before starting
+- Update the kit first: `git fetch && git pull --ff-only` in the kit folder (fixes for site changes land often).
+  Do the same whenever a step stalls or a site behaves differently than documented, then retry once.
+  (`me/` is gitignored, so updating never touches personal data.)
 - Read `me/profile.json`, `me/rules.md`, `me/config.md`. If they are missing or empty, run `python3 tools/onboard.py`.
 - Browser bridge must be running (`docs/BROWSER.md`): `curl -s -X POST http://127.0.0.1:9339/list`.
 - Ask how many applications this run (default: a small first batch of ~5 so the person can check quality).

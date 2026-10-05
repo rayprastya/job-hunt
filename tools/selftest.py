@@ -7,6 +7,11 @@ def check(name, cond, hint=""):
     print(("PASS " if cond else "FAIL ") + name + ("" if cond else f"  -> {hint}"))
     ok = ok and bool(cond)
 
+root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if os.path.isdir(os.path.join(root, ".git")):
+    subprocess.run(["git", "-C", root, "fetch", "-q"], capture_output=True, timeout=60)
+    behind = subprocess.run(["git", "-C", root, "rev-list", "--count", "HEAD..@{u}"], capture_output=True, text=True).stdout.strip()
+    check(f"kit is up to date ({behind or '?'} commits behind)", behind in ("0", ""), "run: git pull --ff-only  (in the kit folder)")
 check("python 3.9+", sys.version_info >= (3, 9), "install Python 3.9 or newer")
 node = shutil.which("node")
 ver = subprocess.run([node, "--version"], capture_output=True, text=True).stdout.strip() if node else ""
