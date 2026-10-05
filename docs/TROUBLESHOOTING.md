@@ -75,4 +75,5 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 |---|---|
 | Auto-mode classifier blocks "real-world transactions" (submitting applications) | Approve when asked, or add a permission rule for `python3 tools/*.py` in your Claude Code settings if you want unattended runs. |
 | Long batches time out the shell tool | Run batches in the background and check the log file. |
+| Auto-update refuses with "local edits to kit files" | You changed tracked kit files | `git stash` (or commit them), then `python3 tools/update.py`. Extra scratch files don't block updates. |
 | A `while read` loop stops after one item | The inner command read the loop's stdin; feed the loop on another file descriptor (`read -u 9 ... 9< file`) or add `< /dev/null`. |
