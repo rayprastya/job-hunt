@@ -28,6 +28,7 @@ $me = Ask "Private data folder (put it in OneDrive/Google Drive or a private rep
 New-Item -ItemType Directory -Force -Path "$me\cv" | Out-Null
 if ($me -ne "$dest\me") { cmd /c mklink /J "$dest\me" "$me" | Out-Null }
 if (-not (Test-Path "$me\tracker.csv")) { Copy-Item "templates\tracker.csv" "$me\tracker.csv" }
+if (-not (Test-Path "$me\learnings.md")) { Copy-Item "templates\learnings.md" "$me\learnings.md" }
 
 Write-Host "`n4/5  A few questions so the agent can fill applications for you (Enter to skip)" -ForegroundColor Cyan
 python tools\onboard.py "$me"

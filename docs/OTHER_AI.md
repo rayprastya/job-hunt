@@ -8,7 +8,7 @@ The kit is plain files plus Python/Node scripts, so any coding agent that can re
 | OpenAI Codex CLI | `AGENTS.md` | Nothing extra; `AGENTS.md` points to the same workflow. |
 | Gemini CLI | `GEMINI.md` or `AGENTS.md` | `ln -s AGENTS.md GEMINI.md` |
 | Cursor / Windsurf / others | Project rules | Add a rule: "Follow AGENTS.md for any job search or application request." |
-| ChatGPT / claude.ai (no shell) | Uploaded files | Upload `docs/WORKFLOW.md`, `me/profile.json`, your CV. It can tailor CVs and draft answers, but can't drive the browser; you submit. |
+| ChatGPT / claude.ai (no shell) | Uploaded files (include `docs/AGENT_PRINCIPLES.md`) | Upload `docs/WORKFLOW.md`, `me/profile.json`, your CV. It can tailor CVs and draft answers, but can't drive the browser; you submit. |
 
 What every agent needs to be able to do:
 1. Run shell commands (python3, node, curl).

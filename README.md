@@ -32,6 +32,7 @@ Then:
 | `me/` | YOUR private data (profile, rules, CV, tracker). Gitignored, never pushed. Keep it in a private repo or synced folder to use it on other devices. |
 | `templates/` | Starting points for `me/` (profile, tracker, a CV HTML template). |
 | `docs/GETTING_STARTED.md` | Beginner setup guide and everyday commands. |
+| `docs/AGENT_PRINCIPLES.md` | How the agent behaves: outcome-first reports, asks only real decisions, never guesses, owns mistakes, session routine (adapted from firstmate). |
 | `docs/WORKFLOW.md` | The step-by-step process the agent follows. |
 | `docs/TROUBLESHOOTING.md` | Every roadblock hit so far and its fix. |
 | `tools/` | Browser bridge (`cdpd.mjs`), form fillers, tracker + sheet sync, onboarding. |

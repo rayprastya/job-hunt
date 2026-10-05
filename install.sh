@@ -32,6 +32,7 @@ ME="${ME/#\~/$HOME}"
 mkdir -p "$ME/cv"
 if [ "$ME" != "$DEST/me" ]; then ln -sfn "$ME" "$DEST/me"; fi
 [ -f "$ME/tracker.csv" ] || cp templates/tracker.csv "$ME/tracker.csv"
+[ -f "$ME/learnings.md" ] || cp templates/learnings.md "$ME/learnings.md"
 
 say "4/5  A few questions so the agent can fill applications for you (Enter to skip, you can edit me/profile.json later)"
 python3 tools/onboard.py "$ME"
