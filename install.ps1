@@ -26,7 +26,10 @@ Set-Location $dest
 Write-Host "`n3/5  Your private folder (me\). It is gitignored: nothing in it is ever pushed." -ForegroundColor Cyan
 $me = Ask "Private data folder (put it in OneDrive/Google Drive or a private repo to use it on other PCs)" "$dest\me"
 New-Item -ItemType Directory -Force -Path "$me\cv" | Out-Null
-if ($me -ne "$dest\me") { cmd /c mklink /J "$dest\me" "$me" | Out-Null }
+if ($me -ne "$dest\me") {
+  if ((Test-Path "$dest\me") -and -not ((Get-Item "$dest\me").Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    Write-Host "NOTE: $dest\me already exists as a real folder, so I won't link it. Using $dest\me." -ForegroundColor Yellow; $me = "$dest\me"
+  } else { cmd /c mklink /J "$dest\me" "$me" | Out-Null } }
 if (-not (Test-Path "$me\tracker.csv")) { Copy-Item "templates\tracker.csv" "$me\tracker.csv" }
 if (-not (Test-Path "$me\learnings.md")) { Copy-Item "templates\learnings.md" "$me\learnings.md" }
 if (-not (Test-Path "$me\.gitignore")) { Copy-Item "templates\me.gitignore" "$me\.gitignore" }

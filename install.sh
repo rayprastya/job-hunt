@@ -15,22 +15,40 @@ if [ -d "$DEST/.git" ]; then
   echo "Found an existing checkout at $DEST, updating it."
   git -C "$DEST" pull --ff-only || true
 elif [ -f "$(dirname "$0")/README.md" ] && [ "$(cd "$(dirname "$0")" && pwd)" != "$DEST" ] && [ -d "$(dirname "$0")/tools" ]; then
-  mkdir -p "$DEST"; cp -R "$(dirname "$0")"/. "$DEST"/
+  SRC="$(cd "$(dirname "$0")" && pwd)"
+  if [ -d "$SRC/.git" ]; then
+    git clone -q "$SRC" "$DEST" && git -C "$DEST" remote set-url origin "$REPO"   # never copies me/ (gitignored)
+  else
+    mkdir -p "$DEST"; (cd "$SRC" && tar --exclude=./me -cf - .) | (cd "$DEST" && tar -xf -)
+  fi
 else
   git clone "$REPO" "$DEST"
 fi
 cd "$DEST"
 
-say "2/5  Checking tools (python3, node 20+, a Chromium browser)"
+say "2/5  Checking tools (python3, node 22+, a Chromium browser)"
 command -v python3 >/dev/null || { echo "python3 is required"; exit 1; }
-command -v node >/dev/null || echo "WARNING: node 20+ is needed for the browser bridge (tools/cdpd.mjs). Install it from https://nodejs.org"
+if command -v node >/dev/null; then
+  [ "$(node --version | tr -d v | cut -d. -f1)" -ge 22 ] || echo "WARNING: Node 22+ is needed for the browser connector; you have $(node --version). Update from https://nodejs.org"
+else
+  echo "WARNING: Node 22+ is needed for the browser connector (tools/cdpd.mjs). Install it from https://nodejs.org"
+fi
+command -v git >/dev/null || { echo "git is required (https://git-scm.com)"; exit 1; }
 ls /Applications 2>/dev/null | grep -qE "Brave Browser|Google Chrome" || echo "NOTE: install Brave or Chrome; see docs/BROWSER.md"
 
 say "3/5  Your private folder (me/). It is gitignored: nothing in it is ever pushed."
 ME=$(ask "Private data folder (keep it in a private repo or synced folder to use it on other devices)" "$DEST/me")
 ME="${ME/#\~/$HOME}"
 mkdir -p "$ME/cv"
-if [ "$ME" != "$DEST/me" ]; then ln -sfn "$ME" "$DEST/me"; fi
+if [ "$ME" != "$DEST/me" ]; then
+  if [ -e "$DEST/me" ] && [ ! -L "$DEST/me" ]; then
+    echo "NOTE: $DEST/me already exists as a real folder, so I won't link it to $ME."
+    echo "      Move its contents to $ME and delete it, then re-run, or just keep using $DEST/me."
+    ME="$DEST/me"
+  else
+    ln -sfn "$ME" "$DEST/me"
+  fi
+fi
 [ -f "$ME/tracker.csv" ] || cp templates/tracker.csv "$ME/tracker.csv"
 [ -f "$ME/learnings.md" ] || cp templates/learnings.md "$ME/learnings.md"
 [ -f "$ME/.gitignore" ] || cp templates/me.gitignore "$ME/.gitignore"

@@ -55,6 +55,7 @@ QUESTIONS = [
     ("work.notice_weeks", "Notice period in weeks"), ("work.hide_employers", "Employers to never mention, comma separated"),
     ("pay.current_monthly", "Current monthly salary (number, in your currency)"), ("pay.currency", "Your currency (e.g. IDR)"),
     ("pay.expected_monthly_home", "Expected monthly salary at home (number)"),
+    ("pay.abroad_monthly", "Optional: expected monthly pay abroad as JSON, e.g. {\"SG\": [\"SGD\", 7500]} (the agent researches when missing)"),
     ("pay.bonuses", "Current bonuses (e.g. THR 1x, year-end 1x)"),
     ("legal.authorized_countries", "Countries you can legally work in without a visa, comma separated"),
     ("legal.needs_sponsorship_elsewhere", "Need visa sponsorship everywhere else? (y/n)"),
@@ -83,6 +84,11 @@ for path, q in QUESTIONS:
 print("\nYears of experience per skill are used for 'how many years of X' questions.")
 print("Current values:", json.dumps(data.get("skills_years", {})))
 ask("skills_years", "Paste updated skills as JSON (e.g. {\"python\": 4, \"golang\": 2}) or Enter to keep")
+if isinstance(data.get("pay", {}).get("abroad_monthly"), str):
+    try:
+        data["pay"]["abroad_monthly"] = json.loads(data["pay"]["abroad_monthly"])
+    except Exception:
+        print("Could not parse abroad pay JSON; leaving it empty."); data["pay"]["abroad_monthly"] = {}
 if isinstance(data.get("skills_years"), str):
     try:
         data["skills_years"] = json.loads(data["skills_years"])

@@ -21,6 +21,7 @@ try:
     import me as ME
     check("me/profile.json loads", True)
     check("name and email set", ME.FIRST and ME.EMAIL, "run python3 tools/onboard.py")
+    check("home country code set", ME.HOME != "XX", "run python3 tools/onboard.py (two-letter code, e.g. ID)")
     check("CV file exists", os.path.exists(ME.cv_path()), f"put your CV at {ME.cv_path()} or fix files.cv in me/profile.json")
     check("skills_years filled", len(ME.SKILL_YEARS) >= 3, "add your skills and honest years in me/profile.json")
     cfg = os.path.join(ME.ME_DIR, "config.md")

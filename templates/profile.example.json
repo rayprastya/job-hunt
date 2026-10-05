@@ -3,41 +3,40 @@
     "first_name": "",
     "last_name": "",
     "email": "",
-    "phone_country_code": "62",
+    "phone_country_code": "",
     "phone_local": "",
-    "city": "Jakarta",
-    "city_autocomplete": "Jakarta, Jakarta Special Capital Region, Indonesia",
-    "country": "Indonesia",
-    "nationality": "Indonesian",
+    "city": "",
+    "city_autocomplete": "",
+    "country": "",
+    "nationality": "",
     "linkedin": "",
     "github": "",
     "age": ""
   },
   "target": {
-    "roles": [
-      "Backend Engineer"
-    ],
-    "seniority": "Mid to Senior",
-    "remote": "remote preferred",
-    "home_onsite_city": "Jakarta",
-    "abroad_ok": true,
-    "abroad_junior_ok": true,
+    "roles": [],
+    "seniority": "",
+    "remote": "",
+    "home_onsite_city": "",
+    "abroad_ok": false,
+    "abroad_junior_ok": false,
     "skip_companies": [],
     "skip_countries": [],
     "skip_company_origins": []
   },
   "work": {
     "current_employer": "",
-    "notice_period": "1 month",
-    "notice_weeks": 4,
+    "notice_period": "",
+    "notice_weeks": 0,
     "hide_employers": []
   },
   "pay": {
-    "currency": "IDR",
+    "currency": "",
     "current_monthly": 0,
     "expected_monthly_home": 0,
     "bonuses": "",
-    "abroad_monthly": {
+    "abroad_monthly": {},
+    "abroad_monthly_example": {
       "SG": [
         "SGD",
         7500
@@ -45,59 +44,21 @@
       "MY": [
         "MYR",
         10000
-      ],
-      "JP": [
-        "JPY",
-        600000
-      ],
-      "AE": [
-        "AED",
-        25000
-      ],
-      "VN": [
-        "VND",
-        50000000
-      ],
-      "TH": [
-        "THB",
-        90000
-      ],
-      "HK": [
-        "HKD",
-        40000
-      ],
-      "NL": [
-        "EUR",
-        5500
-      ],
-      "DE": [
-        "EUR",
-        5500
-      ],
-      "UK": [
-        "GBP",
-        5000
-      ],
-      "AU": [
-        "AUD",
-        9000
       ]
     }
   },
   "legal": {
-    "home_country_code": "ID",
-    "authorized_countries": [
-      "Indonesia"
-    ],
-    "needs_sponsorship_elsewhere": true,
-    "willing_to_relocate": true,
-    "willing_to_travel": true
+    "home_country_code": "",
+    "authorized_countries": [],
+    "needs_sponsorship_elsewhere": false,
+    "willing_to_relocate": false,
+    "willing_to_travel": false
   },
   "eeo": {
-    "gender": "Prefer not to say",
+    "gender": "",
     "orientation": "",
-    "veteran": "Not a veteran",
-    "disability": "No",
+    "veteran": "",
+    "disability": "",
     "mental_health_history": ""
   },
   "education": {
@@ -107,21 +68,13 @@
     "classification": ""
   },
   "languages": {
-    "english": "Professional working proficiency",
-    "japanese": "None",
-    "interview_language": "English"
+    "english": "",
+    "japanese": "",
+    "interview_language": ""
   },
-  "skills_years": {
-    "backend": 3,
-    "python": 3,
-    "golang": 1,
-    "sql": 3,
-    "docker": 2,
-    "kubernetes": 0,
-    "java": 0
-  },
+  "skills_years": {},
   "files": {
-    "cv": "me/cv/CV.pdf",
+    "cv": "",
     "photo": "",
     "linkedin_resume_name": ""
   },
