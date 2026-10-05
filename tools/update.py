@@ -33,7 +33,7 @@ def main():
     print(f"update: {behind} new commit(s) available:\n{log}")
     if "--check" in sys.argv:
         return 0
-    dirty = [l for l in git("status", "--porcelain").stdout.splitlines() if l.strip() and not l[3:].startswith("me/")]
+    dirty = [l for l in git("status", "--porcelain", "--untracked-files=no").stdout.splitlines() if l.strip() and not l[3:].startswith("me/")]
     if dirty:
         print("update: you have local edits to kit files, so I won't pull automatically:\n  " + "\n  ".join(dirty)
               + "\n  Commit or stash them (git stash), then run: python3 tools/update.py"); return 1
