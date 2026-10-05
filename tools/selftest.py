@@ -25,7 +25,7 @@ try:
     check("CV file exists", os.path.exists(ME.cv_path()), f"put your CV at {ME.cv_path()} or fix files.cv in me/profile.json")
     check("skills_years filled", len(ME.SKILL_YEARS) >= 3, "add your skills and honest years in me/profile.json")
     cfg = os.path.join(ME.ME_DIR, "config.md")
-    check("tracker sheet link in me/config.md", os.path.exists(cfg) and "docs.google.com" in open(cfg).read(), "see docs/SHEETS.md")
+    check("tracker sheet link in me/config.md", os.path.exists(cfg) and "docs.google.com" in open(cfg).read(), "run: python3 tools/sheet_create.py (creates it in your Google account and saves the link)")
     from answers import get_answer
     print("  sample answers:", {q: get_answer(q, "text", None, ME.HOME) for q in ["How many years of Python?", "notice period", "Mobile phone number"]})
 except Exception as e:

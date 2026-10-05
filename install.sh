@@ -63,8 +63,8 @@ say "5/5  Done."
 cat <<EOF
 Next steps:
   1. Put your CV in $ME/cv/ (PDF). Keep a version without anything you don't want shared.
-  2. Make a Google Sheet for tracking (docs/SHEETS.md) and paste its link into $ME/config.md.
-  3. Connect your browser (docs/BROWSER.md): separate profile (simplest) or your main browser.
+  2. Connect your browser (docs/BROWSER.md): separate profile (simplest) or your main browser.
+  3. Create your tracker sheet automatically: python3 tools/sheet_create.py (or tell the agent "create my tracker sheet").
   4. Open your AI agent in $DEST and say: "find me jobs and apply" (Claude Code reads CLAUDE.md;
      other agents: see docs/OTHER_AI.md).
 EOF

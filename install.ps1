@@ -41,7 +41,7 @@ python tools\onboard.py "$me"
 
 Write-Host "`n5/5  Done. Next steps:" -ForegroundColor Cyan
 Write-Host "  1. Put your CV (PDF) in $me\cv\ and set files.cv in me\profile.json"
-Write-Host "  2. Create the tracker sheet: docs\SHEETS.md"
-Write-Host "  3. Connect your browser: docs\BROWSER.md (Windows section) - e.g. .\tools\browser-separate.ps1"
+Write-Host "  2. Connect your browser: docs\BROWSER.md (Windows section) - e.g. .\tools\browser-separate.ps1"
+Write-Host "  3. Create your tracker sheet automatically: python tools\sheet_create.py"
 Write-Host "  4. Check everything: python tools\selftest.py"
 Write-Host "  5. Open your AI agent in $dest and say: find me jobs and apply, 5 for now"

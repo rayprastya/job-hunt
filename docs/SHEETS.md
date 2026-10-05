@@ -2,23 +2,22 @@
 
 The local file `me/tracker.csv` is the source of truth. The Google Sheet is a mirror you can open anywhere.
 
-## Setup (2 minutes)
+## Setup (automatic)
 
-1. Create a new Google Sheet (sheets.new) while logged in to your Google account in the browser the agent uses.
-2. File > Import > Upload `templates/tracker.csv` (or paste its header row into A1).
-3. Copy the sheet link into `me/config.md`:
-   ```
-   Tracker sheet: https://docs.google.com/spreadsheets/d/<id>/edit
-   ```
+The agent creates the sheet for you, in your own Google account, with the right columns:
+- Say **"create my tracker sheet"**, or run `python3 tools/sheet_create.py`.
+- Requirements: the browser connector is running and you're logged in to Google in that browser.
+- It opens `sheets.new`, names it "Job Applications Tracker", fills the header (and any rows you already have),
+  and saves the link into `me/config.md`. If a link is already there it does nothing (`--force` makes another).
 
-No API keys or Google credentials are needed: `tools/sheet_push.py` opens the sheet in your logged-in
-browser tab and pastes the whole tracker at A1.
+No API keys or Google passwords are involved: everything happens in your logged-in browser tab.
+`python3 tools/sheet_push.py` then keeps it in sync (the agent does this every ~10 applications).
 
-```bash
-python3 tools/sheet_push.py <tab-id>     # tab id from: curl -s -X POST http://127.0.0.1:9339/list
+### Manual alternative
+Create a sheet at sheets.new, File > Import > Upload `templates/tracker.csv`, and put its link in `me/config.md`:
 ```
-
-If your agent has a Google Sheets connector (e.g. a Claude connector), it can write rows directly instead.
+Tracker sheet: https://docs.google.com/spreadsheets/d/<id>/edit
+```
 
 ## Columns
 

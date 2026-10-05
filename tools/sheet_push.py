@@ -3,7 +3,7 @@
 Usage: python3 sheet_push.py [tab-id]   (without a tab id it opens its own tab)
 Rewrites the whole sheet from A1 (header + every row), so status changes sync too.
 """
-import csv, json, os, sys, time, urllib.request
+import csv, json, os, re, sys, time, urllib.request
 
 TAB = sys.argv[1] if len(sys.argv) > 1 else None
 ME = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "me")
@@ -32,7 +32,8 @@ rows = list(csv.reader(open(f"{ME}/tracker.csv")))  # header + all rows; rewrite
 if TAB is None:
     TAB = post("raw", {"method": "Target.createTarget", "params": {"url": "about:blank"}})["targetId"]
 post("activate", {"id": TAB})
-post("goto", {"id": TAB, "url": SHEET.split("#")[0].split("?")[0] + "#gid=0&range=A1"})
+GID = (re.search(r"gid=(\d+)", SHEET) or [None, "0"])[1]  # the tab in the saved link (default: first tab)
+post("goto", {"id": TAB, "url": SHEET.split("#")[0].split("?")[0] + f"#gid={GID}&range=A1"})
 for _ in range(30):
     time.sleep(1)
     try:

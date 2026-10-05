@@ -29,8 +29,8 @@ honest years, jobs you never want) and saves everything to `me/profile.json`. Re
 
 Then:
 1. Put your CV (PDF) in `me/cv/` (the installer asks for its path).
-2. Create the tracker sheet: [docs/SHEETS.md](docs/SHEETS.md).
-3. Connect your browser: [docs/BROWSER.md](docs/BROWSER.md) (summary below).
+2. Connect your browser: [docs/BROWSER.md](docs/BROWSER.md) (summary below).
+3. Create your tracker sheet automatically: `python3 tools/sheet_create.py` (or tell the agent "create my tracker sheet").
 4. Check everything: `python3 tools/selftest.py` (Windows: `python tools\selftest.py`).
 5. Open your AI agent in the install folder and say **"find me jobs and apply, 5 for now"**.
    Claude Code reads `CLAUDE.md`; other agents: [docs/OTHER_AI.md](docs/OTHER_AI.md).
@@ -91,7 +91,7 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
 
 **Tools:** `selftest.py` (check + auto-update), `update.py`, `run.py` (stall retry), `search_jobs.py`, `prefs.py`,
 `easy_apply.py`, `sr_apply.py` (SmartRecruiters), `ashby_apply.py`, `gh_apply.py` (Greenhouse), `answers.py`,
-`log.py`, `sheet_push.py`, `cv_pdf.py`, `br.py` (browser CLI), `cdpd.mjs` (browser connector), `onboard.py`,
+`log.py`, `sheet_create.py`, `sheet_push.py`, `cv_pdf.py`, `br.py` (browser CLI), `cdpd.mjs` (browser connector), `onboard.py`,
 `guard_commit.py`, `upstream_check.py`, `browser-separate.sh/.ps1`.
 
 ## Known limits (by design or by the sites)

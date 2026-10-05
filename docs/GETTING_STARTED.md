@@ -90,14 +90,9 @@ the sheet link and the browser connector, and tells you exactly what to fix.
 
 ## Create the tracking sheet (both options)
 
-1. Go to **sheets.new** (logged in to Google).
-2. File > Import > Upload > choose `templates/tracker.csv` from the install folder > "Replace current sheet".
-3. Copy the sheet's link and put it in `me/config.md` like this:
-   ```
-   Tracker sheet: https://docs.google.com/spreadsheets/d/....../edit
-   ```
-The AI keeps `me/tracker.csv` as the master copy and pastes it into this sheet every ~10 applications.
-No Google passwords or API keys are involved: it uses your logged-in browser.
+Nothing to do by hand: after you connect your browser (next section) and log in to Google there, tell the agent
+**"create my tracker sheet"** (or run `python3 tools/sheet_create.py`). It creates the sheet in your Google account,
+with the right columns, and saves the link to `me/config.md`. Details and the manual way: `docs/SHEETS.md`.
 
 ---
 

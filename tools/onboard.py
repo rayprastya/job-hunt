@@ -38,6 +38,7 @@ QUESTIONS = [
     ("identity.phone_country_code", "Phone country code (digits, e.g. 62)"), ("identity.phone_local", "Phone number without country code"),
     ("identity.city", "City you live in"),
     ("identity.city_autocomplete", "Your city as job sites autocomplete it (e.g. 'Jakarta, Jakarta Special Capital Region, Indonesia')"), ("identity.country", "Country you live in"), ("identity.nationality", "Nationality (e.g. Indonesian)"),
+    ("legal.home_country_code", "Two-letter code of the country you live in (e.g. ID, SG, MY, PH)"),
     ("identity.linkedin", "LinkedIn URL"), ("identity.github", "GitHub / portfolio URL"), ("identity.age", "Age (only used if a form asks)"),
     ("target.roles", "Target roles, comma separated (e.g. Backend Engineer, Fullstack Developer)"),
     ("target.seniority", "Seniority you want to be pitched as (e.g. Mid, Mid to Senior)"),
