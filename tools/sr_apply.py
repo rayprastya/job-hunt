@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from answers import get_answer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import me as ME
-CV = ME.cv_path()
+CV = ME.require_cv()
 B = "http://127.0.0.1:9339"
 
 HELPERS = r"""

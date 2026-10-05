@@ -7,6 +7,7 @@ import os, re, sys, json
 _src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "easy_apply.py")).read().split("# --- open the job")[0]
 _src = re.sub(r"(?m)^TAB, JOB, COUNTRY = .*$", "COUNTRY = 'ID'", _src)
 _src = re.sub(r"(?m)^a = AX\(TAB\)$", "a = None", _src)
+_src = re.sub(r"(?m)^CV = ME\.require_cv\(\)$", "CV = None", _src)
 _src = re.sub(r"(?m)^from ax import .*$", "", _src)
 _ns = {"__file__": __file__}
 exec(compile(_src, "easy_apply_rules", "exec"), _ns)

@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from answers import get_answer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import me as ME
-CV = ME.cv_path()
+CV = ME.require_cv()
 B = "http://127.0.0.1:9339"
 
 BASE = {
@@ -23,7 +23,8 @@ BASE = {
     "linkedin": ME.LINKEDIN, "github": ME.GITHUB, "website": ME.GITHUB, "portfolio": ME.GITHUB,
     "notice period": ME.NOTICE, "relatives": "No", "if yes, please state": "",
     "how did you": "LinkedIn", "hear about": "LinkedIn", "current location": ME.CITY_FULL,
-    "location": ME.CITY_FULL, "nationality": ME.NATIONALITY, "gender": ME.GENDER,
+    "location": ME.CITY_FULL, "which country": ME.COUNTRY_NAME, "country of residence": ME.COUNTRY_NAME,
+    "country are you": ME.COUNTRY_NAME, "nationality": ME.NATIONALITY, "gender": ME.GENDER,
 }
 BASE.update(ANS)
 

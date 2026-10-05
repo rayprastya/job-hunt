@@ -41,3 +41,13 @@ def cv_path():
 def current_in(cur):
     rate = FX_PER_UNIT.get(cur.upper())
     return str(round(CURRENT_MONTHLY / rate / 100) * 100) if rate and HOME_CUR == "IDR" else None
+
+
+def require_cv():
+    """Stop early with a clear message when the CV file is missing."""
+    p = cv_path()
+    if not os.path.exists(p):
+        import sys
+        print(f"NEEDS_ANSWERS [\"CV file not found at {p}: put your CV there or fix files.cv in me/profile.json\"]")
+        sys.exit(3)
+    return p

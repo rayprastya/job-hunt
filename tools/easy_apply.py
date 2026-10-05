@@ -11,7 +11,7 @@ import me as ME
 
 TAB, JOB, COUNTRY = sys.argv[1], sys.argv[2], sys.argv[3].replace("HOME", "")
 DRY = "--dry-run" in sys.argv
-CV = ME.cv_path()
+CV = ME.require_cv()
 a = AX(TAB)
 
 YEARS = dict(ME.SKILL_YEARS)  # from me/profile.json skills_years
@@ -285,11 +285,12 @@ for step in range(12):
     cvr = [n for n in ns if n["role"] in ("radio", "button") and ME.P["files"].get("linkedin_resume_name") and ME.P["files"]["linkedin_resume_name"] in n["name"]]
     if cvr and cvr[0]["role"] == "radio" and cvr[0]["checked"] not in (True, "true"):
         a.click(cvr[0]); time.sleep(1)
-    elif not cvr and any(n["role"] == "button" and n["name"] == "Upload resume" for n in ns):
+    elif not cvr and ME.P["files"].get("linkedin_resume_name") and any(n["role"] == "button" and n["name"] == "Upload resume" for n in ns):
         more = [n for n in ns if n["role"] == "button" and re.search(r"show \d+ more resumes|show more resumes", n["name"], re.I)]
         if more:
             a.click(more[0]); continue
-        print("NEEDS_ANSWERS", json.dumps(["Backend CV not in LinkedIn resume list"])); sys.exit(3)
+        print("NEEDS_ANSWERS", json.dumps([f"Your CV '{ME.P['files']['linkedin_resume_name']}' isn't in LinkedIn's saved resumes: upload it at linkedin.com/jobs/application-settings"])); sys.exit(3)
+    # no linkedin_resume_name configured: keep the resume LinkedIn preselected
     # follow company: untick
     for n in ns:
         if n["role"] == "checkbox" and n["name"].lower().startswith("follow") and n["checked"] in (True, "true"):
