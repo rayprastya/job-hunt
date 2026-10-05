@@ -6,16 +6,23 @@ logs everything to a Google Sheet, and stops to ask you whenever a question isn'
 
 ## Quick start
 
+**New here? Read [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md)**: a step-by-step guide, including a way to set
+everything up by just chatting with your AI (no terminal).
+
+Terminal version:
 ```bash
-git clone https://github.com/rayprastya/job-hunt.git && cd job-hunt
-bash install.sh          # asks where to install, then a short interview -> me/profile.json
+git clone https://github.com/rayprastya/job-hunt.git ~/job-hunt-download && bash ~/job-hunt-download/install.sh
 ```
+
+`install.sh` asks where to install the kit and where to keep your private `me/` folder, checks Python/Node/browser,
+then interviews you once (identity, target roles, pay, visa, diversity answers, education, skills and years) and
+saves the answers to `me/profile.json`. Re-run the interview any time with `python3 tools/onboard.py`.
 
 Then:
 1. Put your CV (PDF) in `me/cv/` and set `files.cv` in `me/profile.json`.
 2. Create the tracker sheet: [docs/SHEETS.md](docs/SHEETS.md).
 3. Connect your browser: [docs/BROWSER.md](docs/BROWSER.md) (separate profile or your main browser).
-4. Open your agent in this folder and say **"find me jobs and apply"**.
+4. Open your AI agent in the install folder and say **"find me jobs and apply, 5 for now"**.
    Claude Code reads `CLAUDE.md`; other agents: [docs/OTHER_AI.md](docs/OTHER_AI.md).
 
 ## What's where
@@ -24,6 +31,7 @@ Then:
 |---|---|
 | `me/` | YOUR private data (profile, rules, CV, tracker). Gitignored, never pushed. Keep it in a private repo or synced folder to use it on other devices. |
 | `templates/` | Starting points for `me/`. |
+| `docs/GETTING_STARTED.md` | Beginner setup guide and everyday commands. |
 | `docs/WORKFLOW.md` | The step-by-step process the agent follows. |
 | `docs/TROUBLESHOOTING.md` | Every roadblock hit so far and its fix. |
 | `tools/` | Browser bridge (`cdpd.mjs`), form fillers, tracker + sheet sync, onboarding. |
