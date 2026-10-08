@@ -11,10 +11,10 @@ import csv, datetime, json, os, re, sys, urllib.request
 
 B = os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339")
 ME = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "me")
-ATS = re.compile(r"ashbyhq\.com|greenhouse\.io|lever\.co|smartrecruiters\.com|briohr\.com|zohorecruit|breezy\.hr|workable\.com")
+ATS = re.compile(r"ashbyhq\.com|greenhouse\.io|lever\.co|smartrecruiters\.com|briohr\.com|zohorecruit|breezy\.hr|workable\.com|pmicareers\.com|mokahr\.com|career\.sea\.com")
 DONE_TEXT = re.compile(r"successfully submitted|thank(s| you) for (applying|your application)|application (has been |was )?(submitted|received|sent)"
                        r"|we('ve| have) received your application", re.I)
-DONE_URL = re.compile(r"/success|/thanks|/thank-you|/confirmation", re.I)
+DONE_URL = re.compile(r"/success|/thanks|/thank-you|thankyou|/confirmation|status=success", re.I)
 
 
 def post(cmd, body, timeout=60):

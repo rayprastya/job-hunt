@@ -222,8 +222,18 @@ def _answer(q, kind, options=None):
         return pick(options, "No")
     if re.search(r"previously (worked|employed)|ever worked (for|at)|former employee", ql):
         return pick(options, "No")
+    # Conflict-of-interest questions come only from legal.conflicts in the profile; never assume "No".
+    C = (ME.P.get("legal") or {}).get("conflicts") or {}
+    if re.search(r"government|state[- ]owned|\bsoe\b|bumn|public official", ql) and re.search(r"relative|family|you or", ql):
+        return pick(options, C["relatives_government_or_soe"]) if C.get("relatives_government_or_soe") else None
+    if re.search(r"tobacco|aerosol|pwc|pricewaterhouse", ql):
+        return pick(options, C["relatives_tobacco_or_pwc"]) if C.get("relatives_tobacco_or_pwc") else None
+    if re.search(r"vendor|supplier|shareholder|industry|competitor", ql) and re.search(r"relative|family", ql):
+        return pick(options, C["relatives_same_industry_or_vendor"]) if C.get("relatives_same_industry_or_vendor") else None
+    if re.search(r"conflict of interest|potentially conflict|other .*interest", ql):
+        return pick(options, C["other_conflicts"]) if C.get("other_conflicts") else None
     if re.search(r"relatives|family member|friend.*work", ql):
-        return pick(options, "No")
+        return pick(options, C["relatives_at_company"]) if C.get("relatives_at_company") else None
     if re.search(r"mental health|medical history|psychiatric", ql):
         return pick(options, ME.MENTAL_HEALTH) if (ME.MENTAL_HEALTH and options) else (ME.MENTAL_HEALTH or None)
     I = ME.P["identity"]
@@ -298,7 +308,7 @@ def dialog_nodes(scoped=True):
     # keep only nodes inside LinkedIn's "Apply to ..." dialog (or its save prompt); ignore extensions like Simplify
     roots = {n["id"] for n in ns if n["role"] in ("dialog", "alertdialog") and (n["name"].startswith("Apply to") or n["name"] == "")}
     if not roots:
-        return ns
+        return []  # no apply dialog: never act on buttons elsewhere on the page
     inside = []
     for n in ns:
         pid, ok = n["id"], False
@@ -330,8 +340,28 @@ for _ in range(10):
 if not btn:
     applied = [n for n in a.nodes() if n["role"] == "StaticText" and "Applied" in n["name"]]
     print("NO_EASY_APPLY" + (" (already applied)" if applied else "")); sys.exit(2)
-call(btn[0]["b"], "function(){this.click();return 1}")  # mouse clicks on the new link-style opener do nothing
-time.sleep(5)
+# Mouse clicks on the new link-style opener do nothing, and the page has two "Easy Apply" buttons (the
+# sticky header copy can be inert), so try each one until the "Apply to ..." dialog is really open.
+def dialog_open():
+    return any(n["role"] in ("dialog", "alertdialog") and n["name"].startswith("Apply to") for n in a.nodes())
+opened = False
+for attempt in range(2):
+    for cand in btn:
+        try:
+            a.scroll(cand["b"])
+            call(cand["b"], "function(){this.click();return 1}")
+        except Exception:
+            continue
+        time.sleep(4)
+        if dialog_open():
+            opened = True
+            break
+    if opened:
+        break
+    time.sleep(3)
+    btn = [n for n in dialog_nodes(scoped=False) if n["role"] in ("button", "link") and "easy apply" in n["name"].strip().lower()]
+if not opened:
+    print("NEEDS_ANSWERS", json.dumps(["LinkedIn's Easy Apply window did not open; apply by hand or retry later"])); sys.exit(3)
 
 uploaded = False
 answered_log = []
@@ -451,6 +481,8 @@ for step in range(12):
     # validation errors keep us on the same step
     errs = [n["name"] for n in a.nodes() if n["role"] == "StaticText" and len(n["name"]) < 70 and re.search(r"(is required|Please enter|Enter a (valid )?(whole|decimal)|must be|Invalid input|Please make a selection)", n["name"])]
     if errs:
+        if os.environ.get("EA_DEBUG"):
+            print("ANSWERED", json.dumps(answered_log), file=sys.stderr)
         print("NEEDS_ANSWERS", json.dumps(errs[:6])); sys.exit(3)
 
 for n in a.nodes():

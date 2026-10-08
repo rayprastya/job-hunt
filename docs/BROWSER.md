@@ -11,6 +11,16 @@ remote-debugging feature (the "DevTools protocol"). You turn that on in ONE of t
 | After a browser restart | Re-run the launch script | Switch the toggle on again + Allow again |
 | Recommended for | Unattended / overnight runs | Quick runs when you don't want to log in again |
 
+> **Background ("headless") mode is Mode A without a window.** It cannot use the logins in your normal browser:
+> a separate profile has its own cookies, and copying login cookies across is deliberately not supported (it moves
+> your sessions around). So the first time, Mode A opens a visible window and you log in to LinkedIn and Google
+> once; after that `bash tools/browser-separate.sh --headless` runs invisibly with those saved logins. If you don't
+> want to log in again, use Mode B (your normal browser) instead.
+>
+> Some company sites (for example MokaHR, used by Traveloka) also make you sign in with a code sent to your email
+> before you can apply. The agent never reads your email or creates accounts for you: it fills everything else and
+> asks you to sign in.
+
 > Why not just launch your normal browser with `--remote-debugging-port`? Recent Chrome/Brave/Edge ignore that flag
 > on your default profile for security. Mode A gives it a separate profile folder; Mode B uses the browser's own toggle.
 

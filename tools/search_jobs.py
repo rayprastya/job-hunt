@@ -36,8 +36,29 @@ skip_countries = [s.lower() for s in ME.P["target"].get("skip_countries", [])]
 bad_titles_extra = [s.lower() for s in ME.P["target"].get("skip_title_words", [])]
 
 b = Bridge()
-tab = b.open("https://www.linkedin.com/jobs/")
-time.sleep(8)
+# A static same-origin page (not the LinkedIn app, which can navigate itself mid-run and abort the
+# script with "Inspected target navigated or closed"); fetches still carry the user's LinkedIn cookies.
+HOST_PAGE = "https://www.linkedin.com/robots.txt"
+tab = b.open(HOST_PAGE)
+time.sleep(4)
+
+
+def run(js, tries=3):
+    """Evaluate in the LinkedIn tab, reopening it if it navigated away or was closed."""
+    global tab
+    for i in range(tries):
+        try:
+            return b.eval(tab, js)
+        except RuntimeError as e:
+            if i == tries - 1 or not re.search(r"navigated|closed|No target|not found", str(e), re.I):
+                raise
+            print(f"(LinkedIn tab was lost: {e}; reopening and retrying)")
+            try:
+                b.close(tab)
+            except Exception:
+                pass
+            tab = b.open(HOST_PAGE)
+            time.sleep(4)
 
 # 1) search (guest API = no rendering needed); pause between calls or LinkedIn returns empty pages
 qs = []
@@ -47,7 +68,7 @@ for kw in keywords:
         for start in range(0, 25 * a.limit_pages, 25):
             qs.append(f"/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords={kw}&geoId={GEO.get(r, GEO['WW'])}{extra}&f_TPR=r{a.days*86400}&start={start}")
 js = "(async()=>{const out=[];for(const u of %s){await new Promise(z=>setTimeout(z,1800));try{out.push(await (await fetch(encodeURI(u))).text())}catch(e){out.push('')}}return out.join('\\n<!--SPLIT-->\\n')})()" % json.dumps(qs)
-raw = b.eval(tab, js) or ""
+raw = run(js) or ""
 found = {}
 for li in raw.split("<li>"):
     m = re.search(r"jobPosting:(\d+)", li)
@@ -64,7 +85,7 @@ const ids=%s;const out={};await Promise.all(Array.from({length:4},async(_,w)=>{f
 const d=await (await fetch('/voyager/api/jobs/jobPostings/'+j,H)).json();const am=d.applyMethod||{};const k=Object.keys(am)[0]||'';
 out[j]={apply:k.split('.').pop(),url:am[k]?.companyApplyUrl||'',applied:!!d.applyingInfo?.applied,loc:d.formattedLocation||'',desc:(d.description?.text||'').slice(0,4000)}}catch(e){out[j]={err:String(e)}}
 await new Promise(z=>setTimeout(z,300))}}));return JSON.stringify(out)})()""" % json.dumps(ids)
-info = json.loads(b.eval(tab, js) or "{}")
+info = json.loads(run(js) or "{}")
 
 # 3) filter
 import csv
@@ -72,12 +93,18 @@ def norm_key(company, title):
     n = lambda x: re.sub(r"[^a-z0-9]+", " ", x.lower()).strip()
     return n(re.sub(r"\(.*?\)|-.*$", "", company)) + "|" + n(title)
 TRK = os.path.join(ME.ME_DIR, "tracker.csv")
-done, done_keys = "", set()
+def url_key(u):
+    """An apply link without tracking query/fragment, so the same posting matches however it was reached."""
+    u = (u or "").strip().split("#")[0].split("?")[0].rstrip("/").lower()
+    return re.sub(r"^https?://(www\.)?", "", u)
+done, done_keys, done_urls = "", set(), set()
 if os.path.exists(TRK):
     done = open(TRK).read()
     for r in list(csv.reader(open(TRK)))[1:]:
         if len(r) > 2:
             done_keys.add(norm_key(r[1], r[2]))
+        if len(r) > 5 and r[5]:
+            done_urls.add(url_key(r[5]))
 CJK = re.compile(r"[\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]")
 knows_cjk = any(str(v).lower() not in ("", "none", "no") for k, v in ME.P.get("languages", {}).items() if k in ("japanese", "chinese", "korean", "mandarin"))
 keep = []
@@ -85,6 +112,8 @@ for j, c in found.items():
     v = info.get(j, {})
     if v.get("err") or v.get("applied") or j in done or norm_key(c["company"], c["title"]) in done_keys:
         continue
+    if v.get("url") and url_key(v["url"]) in done_urls:
+        continue  # same posting already in the tracker under another company name
     if CJK.search(c["title"]) and not knows_cjk:
         continue  # posting written in Japanese/Chinese/Korean: language required
     loc = (v.get("loc") or c["location"]).lower()

@@ -62,7 +62,14 @@
     "willing_to_relocate": false,
     "willing_to_travel": false,
     "criminal_record": "",
-    "driving_licence": ""
+    "driving_licence": "",
+    "conflicts": {
+      "relatives_at_company": "",
+      "relatives_government_or_soe": "",
+      "relatives_same_industry_or_vendor": "",
+      "relatives_tobacco_or_pwc": "",
+      "other_conflicts": ""
+    }
   },
   "eeo": {
     "gender": "",

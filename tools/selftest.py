@@ -34,5 +34,5 @@ try:
     tabs = json.load(urllib.request.urlopen(urllib.request.Request(os.environ.get("BRIDGE_URL", "http://127.0.0.1:9339") + "/list", b"{}"), timeout=5))
     check("browser bridge running", tabs.get("ok"), "see docs/BROWSER.md")
 except Exception:
-    check("browser bridge running", False, "start it: node tools/cdpd.mjs (see docs/BROWSER.md)")
+    check("browser bridge running", False, "connect a browser: EITHER your normal browser (turn on brave://inspect/#remote-debugging, run node tools/cdpd.mjs, click Allow) OR the background profile (bash tools/browser-separate.sh, log in to LinkedIn+Google once, then --headless and CDP_PORT=9333 node tools/cdpd.mjs). The background profile cannot reuse your normal browser's logins. See docs/BROWSER.md")
 print("\nAll good, you can start." if ok else "\nFix the FAIL lines above, then run this again.")

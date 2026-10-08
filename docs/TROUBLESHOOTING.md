@@ -50,6 +50,17 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 - Ashby label "advantage" matched the key "age" -> label keys match whole words only.
 - Resume uploaded into a photo field -> pick the file input whose `accept` includes `.pdf`.
 
+## Seen 2026-10-08 (real run)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `search_jobs.py` crashed: "Inspected target navigated or closed" | It ran its LinkedIn requests inside the LinkedIn web app, which can navigate itself mid-run | It now runs them from a static LinkedIn page (`/robots.txt`, same cookies) and reopens the tab and retries if it is lost. |
+| A job you already applied to showed up again | Same posting listed under another company name (e.g. "Sea" vs "Monee (Sea Labs)") | Search also skips jobs whose apply link (without tracking parameters) is already in the tracker. |
+| Easy Apply printed UNKNOWN_END after clicking an unrelated "Next" on the job page | The Easy Apply window never opened, and the tool then acted on buttons outside it | The opener tries each "Easy Apply" button until the "Apply to …" window is really open, and the tool never clicks anything outside that window; if it never opens it stops with a clear message. |
+| Phone rejected ("Please enter a valid phone number") with junk before the number | Clearing a field with Cmd/Ctrl+A doesn't work inside LinkedIn's closed shadow DOM, so old text stayed | `ax.py` selects the field's own text before typing. |
+| Family / conflict-of-interest questions were all answered "No" | A hard-coded default, not the user's data | Answers now come only from `legal.conflicts` in the profile (asked during onboarding); unanswered means the agent asks. |
+| Background browser not logged in | It is a separate profile; it can't reuse your normal browser's logins | Log in once in the visible window, or use your normal browser (Mode B). See BROWSER.md. |
+
 ## Company application systems
 
 | System | Status | Notes |
@@ -60,6 +71,8 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 | Ashby (`jobs.ashbyhq.com`) | Prefill only | Invisible bot check blocks automated Submit. `ashby_apply.py --dry-run` fills everything; you click Submit. |
 | Greenhouse (`job-boards.greenhouse.io`) | Prefill only | reCAPTCHA. Dropdowns: open the control (a second click may be needed when another menu was open), click the option; typing the full option text can filter everything out, so type only a short prefix. The phone "Country" flyout isn't automated yet: `gh_apply.py` prints a CHECK line and you pick it in one click before Submit. |
 | Lever (`jobs.lever.co`) | Prefill only | hCaptcha. |
+| PMI / Sampoerna careers (Phenom) | Fill by label, no account | 2 steps. "Country Phone Code" is a type-ahead: type `+62` key by key and click the suggestion. Skills field max 400 characters; LinkedIn URL needs `https://www.`. Many conflict-of-interest questions (government officials incl. SOE staff, tobacco, PwC). Success URL contains `applythankyou?status=success`. |
+| MokaHR (Traveloka) | Needs the user | Requires email sign-in with a code (creates an account). Fill after the user signs in. |
 | Sea / Shopee / Monee / Garena careers | `tools/sea_apply.py`, headless OK | Needs `education.gpa`. Dropdowns open only on a real mouse click (keyboard shows "No data"); options render in a class-less `<div>` at the end of `<body>`. "Current Location" is a country list. Degree classification uses UK/US honours, so other systems pick "Others / Not Applicable". Old `careers.monee.com/job-detail?id=` links show an empty page when the posting closed. |
 | BrioHR (`boards.briohr.com`) | Prefill only | Visible "I'm not a robot" checkbox: you tick it and Submit. Custom questions are textareas whose label lookup can grab the section title; match by field id or the label right above the box. |
 | Workday | Manual | Needs an account per company. |

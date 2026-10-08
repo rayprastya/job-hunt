@@ -88,9 +88,14 @@ class AX:
         self.scroll(b)
         self.raw("DOM.focus", {"backendNodeId": b})
         if clear:
-            # select all + delete
-            for t in ("rawKeyDown", "keyUp"):
-                self.raw("Input.dispatchKeyEvent", {"type": t, "key": "a", "code": "KeyA", "windowsVirtualKeyCode": 65, "modifiers": 4})
+            # Select the field's own text (works inside closed shadow roots, where Cmd/Ctrl+A may not), then delete.
+            try:
+                obj = self.raw("DOM.resolveNode", {"backendNodeId": b})["object"]["objectId"]
+                self.raw("Runtime.callFunctionOn", {"objectId": obj, "functionDeclaration":
+                         "function(){this.focus();if(this.select)this.select();else{const r=document.createRange();r.selectNodeContents(this);const s=getSelection();s.removeAllRanges();s.addRange(r)}}"})
+            except Exception:
+                for t in ("rawKeyDown", "keyUp"):  # fallback: select-all shortcut (Cmd on macOS, Ctrl elsewhere)
+                    self.raw("Input.dispatchKeyEvent", {"type": t, "key": "a", "code": "KeyA", "windowsVirtualKeyCode": 65, "modifiers": 4 if sys.platform == "darwin" else 2})
             self.key("Backspace", "Backspace", 8)
         if text:
             self.raw("Input.insertText", {"text": text})
