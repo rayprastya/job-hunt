@@ -51,3 +51,22 @@ def require_cv():
         print(f"NEEDS_ANSWERS [\"CV file not found at {p}: put your CV there or fix files.cv in me/profile.json\"]")
         sys.exit(3)
     return p
+
+
+# Employment type: target.employment_types lists what the user accepts ("full-time", "contract", "part-time",
+# "freelance", "internship"). Returns the unwanted kind a posting looks like, or None.
+_EMP = {
+    "contract": r"(?<!smart )\bcontract(ual)?\b(?! (management|lifecycle|law|review|negotiation|developer|engineer|audit))|\bkontrak\b|\bpkwt\b|\bcontract basis\b|\b\d+[- ]months?\b.{0,20}\b(contract|extendable|project)\b|\bproject[- ]based\b|\bfixed[- ]term\b",
+    "part-time": r"\bpart[- ]time\b|\bparuh waktu\b",
+    "freelance": r"\bfreelance(r)?\b",
+    "internship": r"\bintern(ship)?\b|\bmagang\b",
+}
+def employment_mismatch(text):
+    want = [w.lower() for w in P.get("target", {}).get("employment_types", []) or []]
+    if not want:
+        return None
+    import re as _re
+    for kind, rx in _EMP.items():
+        if kind not in want and _re.search(rx, text or "", _re.I):
+            return kind
+    return None

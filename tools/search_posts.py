@@ -132,6 +132,8 @@ for q in queries:
             reason = "India-based"
         elif TOO_SENIOR.search(t):
             reason = "too senior"
+        elif ME.employment_mismatch(t):
+            reason = ME.employment_mismatch(t) + " role (you want " + "/".join(T.get("employment_types", [])) + ")"
         elif not re.search("|".join(re.escape(x) for x in ([w for w in places if w] + ["remote", "wfh", "work from home", "anywhere"])), t, re.I):
             reason = "not in your places (" + ", ".join(w for w in places if w) + ") and not remote"
         else:

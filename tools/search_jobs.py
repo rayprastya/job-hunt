@@ -123,6 +123,8 @@ for j, c in found.items():
     if any(s in c["company"].lower() for s in skip_companies) or any(s in loc for s in skip_countries):
         continue
     d = v.get("desc", "")
+    if ME.employment_mismatch(t + " " + d[:1500]):
+        continue  # e.g. a contract role when the user only wants full-time
     flags = []
     if LOCAL_ONLY.search(d):
         flags.append("local-only?")

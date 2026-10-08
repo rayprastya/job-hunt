@@ -34,6 +34,7 @@ def ask(path, question):
 
 
 QUESTIONS = [
+    ("target.employment_types", "Which employment types do you accept? (comma list: full-time, contract, part-time, freelance, internship). Postings of other types are skipped"),
     ("identity.first_name", "First name"), ("identity.last_name", "Last name"), ("identity.email", "Email"),
     ("identity.phone_country_code", "Phone country code (digits, e.g. 62)"), ("identity.phone_local", "Phone number without country code"),
     ("identity.city", "City you live in"),

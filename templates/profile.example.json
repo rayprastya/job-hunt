@@ -28,7 +28,8 @@
     "abroad_junior_ok": false,
     "skip_companies": [],
     "skip_countries": [],
-    "skip_company_origins": []
+    "skip_company_origins": [],
+    "employment_types": []
   },
   "work": {
     "current_employer": "",
