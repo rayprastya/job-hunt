@@ -9,6 +9,10 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 - Run apply tools through `python3 tools/run.py <tool.py> ...`: if a tool stalls or crashes it updates the kit and,
   only when new fixes arrived, retries once. If it still stalls, log the job and move on.
 - Read `me/profile.json`, `me/rules.md`, `me/config.md`. If they are missing or empty, run `python3 tools/onboard.py`.
+- Browser: follow `browser.mode` in the profile. `background` = start `bash tools/browser-separate.sh --headless` and
+  `BRIDGE_PORT=9341 CDP_PORT=9333 node tools/cdpd.mjs`; if LinkedIn shows a login page there, run it once without
+  `--headless` and ask the user to log in (never copy cookies from their normal browser). `normal` = their usual browser
+  (`node tools/cdpd.mjs`, they click Allow). Blank = ask them once and save the answer.
 - Browser bridge must be running (`docs/BROWSER.md`): `curl -s -X POST http://127.0.0.1:9339/list`
   (another port: set `BRIDGE_PORT` for `cdpd.mjs` and `BRIDGE_URL=http://127.0.0.1:<port>` for the tools).
 - **The Google Sheet is the source of truth.** Run `python3 tools/sheet_push.py --pull` before searching or applying:
@@ -40,6 +44,13 @@ Any agent (Claude, Codex, Gemini, ...) follows this. Facts about the person come
 - Filter out: already applied, learned no-nos (`preferences.avoid`, see `me/preferences.md`), skip companies/countries from the profile, titles outside the target,
   local-language-required roles, "must already live in X / citizens only" roles.
 - Also scan LinkedIn content search for hiring posts; log good ones as leads (never email people on the user's behalf).
+
+### Hiring posts (not job listings)
+`python3 tools/search_posts.py --days 7` finds LinkedIn *posts* ("we're hiring …") through Google and reads each
+public post without logging in (your LinkedIn account is never used, so it can't be signed out), works headless, and
+keeps backend/fullstack roles in `target.post_search_places` or remote, dropping job seekers, other-language posts, too-senior roles, India-based posts (when the
+user skips India) and the user's no-nos. Posts with an apply link are applied to like any job; email-only or
+"DM me" posts are leads the user sends themselves (log them as `Shortlisted` with `NEEDS YOU: email <address>`).
 
 ## 2. Choose the route (research first)
 1. Apply link or email inside the posting -> use it (emails become leads for the user).

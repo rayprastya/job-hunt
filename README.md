@@ -96,7 +96,7 @@ The agent fills forms in Brave, Chrome or Edge. Pick one (full steps with pictur
 | `docs/UPSTREAM.md` | How firstmate improvements are tracked (weekly GitHub issue + "review firstmate updates"). |
 | `tools/` | See below. |
 
-**Tools:** `selftest.py` (check + auto-update), `update.py`, `run.py` (stall retry), `search_jobs.py`, `prefs.py`,
+**Tools:** `selftest.py` (check + auto-update), `update.py`, `run.py` (stall retry), `search_jobs.py`, `search_posts.py` (LinkedIn hiring posts, no login), `prefs.py`,
 `easy_apply.py`, `sr_apply.py` (SmartRecruiters), `sea_apply.py` (Sea/Shopee/Monee/Garena), `ashby_apply.py`, `gh_apply.py` (Greenhouse), `answers.py`,
 `log.py`, `sheet_create.py`, `sheet_push.py` (two-way sync), `tabs.py` (close finished tabs), `cv_pdf.py`, `br.py` (browser CLI), `cdpd.mjs` (browser connector), `onboard.py`,
 `guard_commit.py`, `upstream_check.py`, `browser-separate.sh/.ps1`.

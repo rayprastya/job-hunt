@@ -11,6 +11,12 @@ remote-debugging feature (the "DevTools protocol"). You turn that on in ONE of t
 | After a browser restart | Re-run the launch script | Switch the toggle on again + Allow again |
 | Recommended for | Unattended / overnight runs | Quick runs when you don't want to log in again |
 
+> **LinkedIn and headless:** LinkedIn signs out a logged-in session that runs in true headless mode (the browser
+> reports no brand and looks like a bot) and also after many fast automated searches. So: run LinkedIn *job* search
+> and Easy Apply in your normal browser (Mode B) or a visible Mode A window, and use the no-login post search
+> (`tools/search_posts.py`, the default) for hiring posts, which never uses your LinkedIn account and runs fine headless.
+> Career sites (Sea, SmartRecruiters, PMI, …) work headless.
+>
 > **Background ("headless") mode is Mode A without a window.** It cannot use the logins in your normal browser:
 > a separate profile has its own cookies, and copying login cookies across is deliberately not supported (it moves
 > your sessions around). So the first time, Mode A opens a visible window and you log in to LinkedIn and Google

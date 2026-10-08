@@ -60,6 +60,7 @@ Always review `Notes` in the tracker; these were real mistakes, now fixed:
 | Phone rejected ("Please enter a valid phone number") with junk before the number | Clearing a field with Cmd/Ctrl+A doesn't work inside LinkedIn's closed shadow DOM, so old text stayed | `ax.py` selects the field's own text before typing. |
 | Family / conflict-of-interest questions were all answered "No" | A hard-coded default, not the user's data | Answers now come only from `legal.conflicts` in the profile (asked during onboarding); unanswered means the agent asks. |
 | Custom dropdowns don't open, clicks do nothing | The tab is in the background (some sites ignore input on hidden tabs), or the click lands before a smooth scroll finishes | Bring the tab to the front (`/activate`) before filling, scroll with `behavior:'instant'`, and re-measure the element after scrolling. |
+| LinkedIn keeps asking you to log in again in the background browser | True headless is detected (old version, empty browser brand) and many fast searches look like a bot; LinkedIn revokes the session | Don't run logged-in LinkedIn in headless. Use `search_posts.py` (no login) for posts; use your normal browser for LinkedIn jobs. The launcher now matches the real browser version and offers `--hidden`, but macOS shows the window again once tabs open. |
 | Background browser not logged in | It is a separate profile; it can't reuse your normal browser's logins | Log in once in the visible window, or use your normal browser (Mode B). See BROWSER.md. |
 
 ## Company application systems

@@ -11,7 +11,11 @@ $paths = @{
 $exe = $paths[$Browser] | Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $exe) { Write-Host "Could not find $Browser. Install it or pass -Browser chrome/edge."; exit 1 }
 $argsList = @("--remote-debugging-port=9333", "--user-data-dir=$profileDir")
-if ($Headless) { $argsList += @("--headless=new", "--window-size=1440,1000", "--user-agent=`"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36`"") }
+if ($Headless) {
+  # Match the real browser version, or sites like LinkedIn sign you out of the saved login.
+  $major = ((Get-Item $exe).VersionInfo.ProductVersion -split '\.')[0]; if (-not $major) { $major = "140" }
+  $argsList += @("--headless=new", "--window-size=1440,1000", "--user-agent=`"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/$major.0.0.0 Safari/537.36`"")
+}
 Start-Process $exe -ArgumentList $argsList
 Write-Host "Opened $Browser with profile $profileDir on port 9333. Log in to LinkedIn and Google once in that window."
 Write-Host 'Then start the bridge in another PowerShell window:  $env:CDP_PORT=9333; node tools\cdpd.mjs'

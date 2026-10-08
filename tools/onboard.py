@@ -74,6 +74,7 @@ QUESTIONS = [
     ("legal.conflicts.relatives_same_industry_or_vendor", "Any close relative working for a competitor, vendor/supplier, or in the same industry as employers you target? (Yes/No)"),
     ("legal.conflicts.relatives_tobacco_or_pwc", "Any close relative in tobacco/vape or at PwC? (asked by some multinationals) (Yes/No)"),
     ("legal.conflicts.other_conflicts", "Any other directorship, business or job that could conflict with a new employer? (Yes/No)"),
+    ("browser.mode", "How should the agent use your browser? 'background' = invisible, needs a one-time login in a separate profile (it can't reuse your normal browser's logins); 'normal' = your usual browser and logins, opens tabs you can see"),
     ("cover_letter.mode", "Cover letters: 'auto' (write when there's a field), 'required' (only when required), 'never', or 'ask' (decide later)"),
     ("cover_letter.reference_file", "Path to a cover letter you like (yours or a sample) so the agent mirrors its tone; blank to skip"),
     ("cover_letter.hiring_message_notes", "'Message to the hiring team' style (e.g. soft, not salesy, cite 2-3 facts from my current job); blank = same as cover letters"),
