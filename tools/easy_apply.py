@@ -40,6 +40,15 @@ def _answer(q, kind, options=None):
         spec = [v for k, v in YEARS.items() if k not in GENERIC and re.search(r"(?<![a-z])" + re.escape(k.strip()), ql)]
         have = max(spec) if spec else max([v for k, v in YEARS.items() if k in GENERIC] or [0])
         return pick(options, "Yes" if have >= need else "No")
+    m_ctry = re.search(r"years of (work )?experience (do you have )?in (the )?(uae|united arab emirates|singapore|malaysia|japan|hong kong|thailand|vietnam|germany|netherlands|uk|united kingdom|australia|usa|united states)\b", ql)
+    if m_ctry:
+        home_names = {ME.COUNTRY_NAME.lower(), ME.HOME.lower()}
+        return "0" if m_ctry.group(4) not in home_names else None
+    m_native = re.search(r"\b(are you|is your)\b.{0,30}\b([a-z]+)\b.{0,12}native", ql) or re.search(r"\bnative ([a-z]+) speaker", ql)
+    if m_native and options:
+        lang = (m_native.group(2) if m_native.lastindex >= 2 else m_native.group(1)).lower()
+        level = str((ME.P.get("languages") or {}).get(lang, "none")).lower()
+        return pick(options, "Yes" if "native" in level else "No")
     if re.search(r"how many years|years of (work )?experience|years experience|how much experience", ql):
         if re.match(r"\s*years of (work )?experience\s*[-:?*]*\s*$", ql):
             return "5"
