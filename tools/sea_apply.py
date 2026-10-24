@@ -105,7 +105,7 @@ def set_text(label, value):
 
 
 # 1. Open the application form.
-apply_url = re.sub(r"/(position|job-detail)\b", "/apply", URL.split("?")[0]) if "/apply/" not in URL else URL
+apply_url = re.sub(r"/(position|job-detail)\b", "/apply", URL.split("?")[0]) if "/apply/" not in URL and "/apply?" not in URL else URL
 if "job-detail" in URL:
     apply_url = URL  # monee: click Apply on the detail page
 post("goto", {"id": TAB, "url": apply_url})
