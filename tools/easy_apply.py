@@ -109,6 +109,8 @@ def _answer(q, kind, options=None):
         if "indonesia" in ql:
             return pick(options, "Yes")
         return pick(options, "No" if abroad else "Yes")
+    if kind == "radio" and re.search(r"(currently|do you) (live|living|reside|residing|based|located) in|are you (currently )?(based|located|living|residing) in", ql):
+        return pick(options, "Yes" if ME.COUNTRY_NAME.lower() in ql else "No")
     if re.search(r"relocat", ql):
         return pick(options, "Yes")
     if re.search(r"commut|on-?site|onsite|hybrid|office|remote", ql) and re.search(r"comfortable|willing|able|okay|ok with|agree", ql):
@@ -166,6 +168,9 @@ def _answer(q, kind, options=None):
         return ME.PHONE_LOCAL
     if re.search(r"website|social media|github", ql):
         return ME.GITHUB
+    if re.search(r"web frameworks?\b", ql) and options:
+        fw = ("django", "flask", "fastapi", "rails", "laravel", "spring", "express", "nestjs", "next.js", "react", "vue", "angular")
+        return pick(options, "Yes" if any(f in k.lower() and float(v or 0) > 0 for k, v in YEARS.items() for f in fw) else "No")
     if re.search(r"ci/cd|production deployment", ql) and options:
         return pick(options, "Yes")
     if re.search(r"linkedin", ql):
@@ -180,7 +185,7 @@ def _answer(q, kind, options=None):
         return pick(options, "I am not a protected veteran") or pick(options, "No")
     if re.search(r"disabilit", ql):
         return pick(options, "No, I do not have a disability") or pick(options, "No")
-    if re.search(r"start immediately|immediate(ly)? (start|join|available)|available immediately", ql):
+    if re.search(r"start immediately|immediate(ly)? (start|join|available)|available immediately", ql) and options:
         return pick(options, "No")
     if re.search(r"singaporean|singapore citizen|pr holder|permanent resident|local (citizen|singaporean)|citizen or pr|malaysian citizen", ql) and options:
         return pick(options, "No")
@@ -197,6 +202,8 @@ def _answer(q, kind, options=None):
     if re.match(r"\s*country\s*\*?\s*$", ql):
         return pick(options, ME.COUNTRY_NAME)
     if re.search(r"available to start|start working with us|availability", ql):
+        if not options and re.search(r"in months|\(months?\)", ql):
+            return str(max(1, round(int(ME.NOTICE_WEEKS) / 4)))
         return pick(options, ME.NOTICE) if options else f"After a {ME.NOTICE} notice period"
     if re.search(r"(currently )?(live|living|based|residing|reside) in", ql) and options and not re.search(r"willing|relocat", ql):
         return pick(options, "Yes" if COUNTRY == ME.HOME and re.search(r"indonesia|jakarta", ql) else "No")
@@ -450,7 +457,8 @@ for step in range(12):
                 missing.append(q + " " + str(opts[:6])); continue
             answered_log.append([q[:80], ans])
     # radio groups: LinkedIn gives each radio the question as its accessible name; the option text is its <label>
-    OPT = "function(){let n=this;for(let i=0;i<4&&n;i++){n=n.parentElement;const t=(n&&n.innerText||'').trim();if(t&&t!=='on'&&t.length<120)return t}return (this.value||'').trim()}"
+    # 2026-10 UI: <div role=radio aria-label=question>Yes</div>; else the radio's own <label>; else walk up
+    OPT = "function(){if(this.getAttribute&&this.getAttribute('role')==='radio'&&this.innerText.trim())return this.innerText.trim();const l=this.labels&&this.labels[0];if(l&&l.innerText.trim())return l.innerText.trim();let n=this;for(let i=0;i<4&&n;i++){n=n.parentElement;const t=(n&&n.innerText||'').trim();if(t&&t!=='on'&&t.length<120)return t}return (this.value||'').trim()}"
     LEG = "function(){const f=this.closest('fieldset');return f?((f.querySelector('legend')||f).innerText||'').trim():''}"
     groups = {}
     for n in ns:
@@ -458,9 +466,13 @@ for step in range(12):
             continue
         opt = call(n["b"], OPT) or n["name"]
         q = n["name"] if n["name"].strip() and n["name"].strip() != opt else (call(n["b"], LEG) or "")
+        if "\n" in opt:
+            continue  # hidden twin <input> of a role=radio div (2026-10 UI): its text spans every option
         q = re.sub(r"\s+", " ", q).strip()
         groups.setdefault(q, []).append((opt, n))
     for q, rs in groups.items():
+        if re.fullmatch(r"(yes|no)( (yes|no))*", q.lower()):
+            continue  # hidden twin inputs whose only "question" is the option list (answered via the role=radio divs)
         if any(n["checked"] in (True, "true") for _, n in rs):
             continue
         opts = [o for o, _ in rs]
