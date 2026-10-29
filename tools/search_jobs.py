@@ -12,7 +12,9 @@ import prefs as PREFS
 
 GEO = {"ID": "102478259", "SG": "102454443", "MY": "106808692", "JP": "101355337", "WW": "92000000", "TH": "105146118",
        "VN": "104195383", "HK": "103291313", "TW": "104187078", "AE": "104305776", "NL": "102890719", "DE": "101282230",
-       "AU": "101452733", "UK": "101165590", "PH": "103121230", "US": "103644278", "CA": "101174742", "IN": "102713980"}
+       "AU": "101452733", "UK": "101165590", "PH": "103121230", "US": "103644278", "CA": "101174742", "IN": "102713980",
+       "KR": "105149562", "SA": "100459316", "QA": "104170880", "IE": "104738515", "ES": "105646813", "PL": "105072130",
+       "SE": "105117694"}
 BAD_TITLE = re.compile(r"intern\b|principal|staff|manager|director|head of|architect|\blead\b|frontend|front-end|mobile|android|ios\b|data scien|"
                        r"machine learning|\bml\b|\bqa\b|tester|test engineer|sre\b|site reliab|devops|security|salesforce|\bsap\b|embedded|"
                        r"sales|support|consultant|trainer|tutor|annotat|teacher|writer|evaluator|data entry|recruit|apprentice", re.I)
@@ -122,7 +124,7 @@ for j, c in found.items():
         continue
     if any(s in c["company"].lower() for s in skip_companies) or any(s in loc for s in skip_countries):
         continue
-    d = v.get("desc", "")
+    d = v.get("desc", "").encode("utf-8", "replace").decode("utf-8")  # the 4000-char cut can split an emoji
     if ME.employment_mismatch(t + " " + d[:1500]):
         continue  # e.g. a contract role when the user only wants full-time
     flags = []
